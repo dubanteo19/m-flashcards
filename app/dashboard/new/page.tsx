@@ -2,7 +2,7 @@
 
 import BackButton from "@/components/back-button";
 import CollectionForm from "@/components/collection-form";
-import { Loader } from "lucide-react";
+import Loader from "@/components/loader";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 

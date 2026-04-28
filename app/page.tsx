@@ -1,11 +1,12 @@
 "use client";
 
 import { Collection } from "@/app/lib/types";
+import Loader from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { collectionService } from "@/services/collectionService";
 import { motion } from "framer-motion";
-import { BookOpen, Loader2, User } from "lucide-react";
+import { BookOpen, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -23,12 +24,7 @@ export default function HomePage() {
     fetchPublicCollections();
   }, []);
 
-  if (loading) return (
-    <div className="flex h-screen items-center justify-center">
-      <Loader2 className="animate-spin text-primary" size={40} />
-    </div>
-  );
-
+  if (loading) return <Loader />
   return (
     <main className="container mx-auto py-10 px-4">
       <div className="flex justify-between items-center mb-8">

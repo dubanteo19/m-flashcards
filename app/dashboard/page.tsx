@@ -14,11 +14,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { collectionService } from "@/services/collectionService";
-import { Loader, Loader2, LogOut, Pencil, Plus, Trash } from "lucide-react";
+import { BookOpen, Loader2, LogOut, Pencil, Plus, Trash } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Collection } from "../lib/types";
+import Loader from "@/components/loader";
 export default function Dashboard() {
     const [username, setUsername] = useState<string | null>(null);
     const [collections, setCollections] = useState<Collection[]>([]);
@@ -110,10 +111,19 @@ export default function Dashboard() {
                                     </TableCell>
                                     <TableCell>{collection.cards_count} cards</TableCell>
                                     <TableCell className="text-right">
-                                        <Link href={`/dashboard/edit/${collection.slug}`}>
-                                            <Button variant="outline" size="sm"><Pencil size={14} className="mr-2" /> Edit</Button>
-                                        </Link>
-                                        <Button variant="outline" size="sm" onClick={() => setCollectionToDelete(collection.slug || null)}><Trash size={14} className="mr-2" /> Delete</Button>
+                                        <Button asChild variant="outline" size="sm">
+                                            <Link href={`/dashboard/edit/${collection.slug}`}>
+                                                <Pencil size={14} className="mr-2" /> Edit
+                                            </Link>
+                                        </Button>
+                                        <Button variant="destructive" size="sm" onClick={() => setCollectionToDelete(collection.slug || null)}>
+                                            <Trash size={14} />
+                                        </Button>
+                                        <Button asChild size="sm">
+                                            <Link href={`/learn/${collection.slug}`}>
+                                                <BookOpen size={14} className="mr-2" /> Learn
+                                            </Link>
+                                        </Button>
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -144,6 +154,6 @@ export default function Dashboard() {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </div>
+        </div >
     );
 }
