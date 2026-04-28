@@ -6,7 +6,7 @@ import Loader from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { collectionService } from "@/services/collectionService";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, LayoutDashboard } from "lucide-react";
+import { ChevronLeft, ChevronRight, LayoutDashboard, Shuffle } from "lucide-react";
 import Link from "next/link";
 import { use, useEffect, useState } from "react";
 
@@ -27,12 +27,17 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
         loadData();
     }, [slug]);
 
-    const currentIndex = Math.abs(page % (cards.length || 1));
+    const currentIndex = ((page % cards.length) + cards.length) % cards.length;
 
     const paginate = (newDirection: number) => {
         setPage([page + newDirection, newDirection]);
     };
 
+    const handleShuffle = () => {
+        const shuffledCards = [...cards].sort(() => Math.random() - 0.5);
+        setCards(shuffledCards);
+        setPage([0, 0]);
+    };
     if (loading) return <Loader />
 
     if (!collection || cards.length === 0) return <div className="min-h-screen flex flex-col items-center justify-center">
@@ -42,14 +47,19 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
 
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4 overflow-hidden">
-            <div className="mb-8 text-center">
-                <h2 className="text-2xl font-bold">{collection.title}</h2>
-                <p className="text-muted-foreground text-sm max-w-xs mx-auto mb-2 italic">
+            <div className="mb-8 ">
+                <h2 className="text-2xl font-bold text-center">{collection.title}</h2>
+                <p className="text-muted-foreground text-sm max-w-md  mx-auto my-2 italic">
                     {collection.description}
                 </p>
-                <p className="text-primary font-medium">
-                    Card {currentIndex + 1} of {cards.length}
-                </p>
+                <div className="flex items-center justify-center gap-4">
+                    <p className="text-primary font-medium text-center">
+                        Card {currentIndex + 1} of {cards.length}
+                    </p>
+                    <Button size="lg" onClick={handleShuffle}>
+                        <Shuffle className="mr-2 h-4 w-4" /> Shuffle
+                    </Button>
+                </div>
             </div>
 
             <div className="relative w-full max-w-md h-64 flex justify-center items-center">
