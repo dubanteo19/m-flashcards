@@ -7,6 +7,16 @@ export interface Card {
     order_index: number; // For keeping cards in sequence
     created_at?: string;
 }
+
+export interface RawCollectionResponse {
+    id: string;
+    title: string;
+    description: string | null;
+    author_username: string;
+    is_published: boolean;
+    created_at: string;
+    cards: { count: number }[]; // Supabase returns an array of objects for counts
+}
 export interface Collection {
     id: string; // Friendly Slug (e.g., "it-vocab-123")
     title: string;
@@ -14,9 +24,10 @@ export interface Collection {
     author_username: string;
     is_published: boolean;
     created_at: string;
+    cards_count?: number;
     cards?: Card[];
-    cards_count?: [{ count: number }];
 }
+// The exact shape Supabase returns for .select("*, cards(count)")
 
 export interface FlashcardView {
     word: string;

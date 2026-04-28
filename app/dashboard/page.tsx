@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Loader, Loader2, LogOut, Pencil, Plus } from "lucide-react";
 import Link from "next/link";
 import { Collection } from "../lib/types";
+import { collectionService } from "@/services/collectionService";
 
 export default function Dashboard() {
     const [username, setUsername] = useState<string | null>(null);
@@ -24,16 +25,9 @@ export default function Dashboard() {
         }
         const initDashboard = async () => {
             try {
-                const { data, error } = await supabase
-                    .from("collections")
-                    .select("*, cards(count)")
-                    .eq("author_username", savedUsername) // Use the local variable here!
-                    .order("created_at", { ascending: false });
-
-                if (error) throw error;
-
+                const collections = await collectionService.getByUsername(savedUsername);
                 setUsername(savedUsername);
-                setCollections(data || []);
+                setCollections(collections);
             } catch (err) {
                 console.error("Dashboard init error:", err);
             } finally {
@@ -82,17 +76,17 @@ export default function Dashboard() {
                         ) : collections.length === 0 ? (
                             <TableRow><TableCell colSpan={4} className="h-32 text-center text-muted-foreground">No decks yet.</TableCell></TableRow>
                         ) : (
-                            collections.map((col) => (
-                                <TableRow key={col.id}>
-                                    <TableCell className="font-semibold">{col.title}</TableCell>
+                            collections.map((collection) => (
+                                <TableRow key={collection.id}>
+                                    <TableCell className="font-semibold">{collection.title}</TableCell>
                                     <TableCell>
-                                        <Badge variant={col.is_published ? "default" : "secondary"}>
-                                            {col.is_published ? "Public" : "Draft"}
+                                        <Badge variant={collection.is_published ? "default" : "secondary"}>
+                                            {collection.is_published ? "Public" : "Draft"}
                                         </Badge>
                                     </TableCell>
-                                    <TableCell>{col.cards_count?.[0]?.count ?? 0} cards</TableCell>
+                                    <TableCell>{collection.cards_count} cards</TableCell>
                                     <TableCell className="text-right">
-                                        <Link href={`/dashboard/edit/${col.id}`}>
+                                        <Link href={`/dashboard/edit/${collection.id}`}>
                                             <Button variant="outline" size="sm"><Pencil size={14} className="mr-2" /> Edit</Button>
                                         </Link>
                                     </TableCell>

@@ -1,8 +1,8 @@
 "use client";
 
+import BackButton from "@/components/back-button";
 import CollectionForm from "@/components/collection-form";
-import { ChevronLeft, Loader } from "lucide-react";
-import Link from "next/link";
+import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -33,13 +33,7 @@ export default function NewCollectionPage() {
 
     return (
         <div className="container mx-auto py-10 max-w-3xl px-4">
-            <Link
-                href="/dashboard"
-                className="flex items-center text-sm text-muted-foreground hover:text-primary mb-6 transition-colors"
-            >
-                <ChevronLeft size={16} className="mr-1" /> Back to Dashboard
-            </Link>
-
+            <BackButton />
             <div className="mb-8">
                 <h1 className="text-3xl font-bold">
                     Create New Collection

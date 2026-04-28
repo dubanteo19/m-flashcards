@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
+import { Card as CardType, Collection } from "@/app/lib/types";
 import Flashcard from "@/components/flashcard";
 import { Button } from "@/components/ui/button";
+import { collectionService } from "@/services/collectionService";
+import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, LayoutDashboard, Loader } from "lucide-react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { supabase } from "@/app/lib/supabase";
-import { Card as CardType, Collection } from "@/app/lib/types";
+import { use, useEffect, useState } from "react";
 
 export default function LearnPage({ params }: { params: Promise<{ collectionId: string }> }) {
     const { collectionId } = use(params);
@@ -18,19 +18,9 @@ export default function LearnPage({ params }: { params: Promise<{ collectionId: 
 
     useEffect(() => {
         async function loadData() {
-            // Fetch collection details and cards in one go
-            const { data, error } = await supabase
-                .from("collections")
-                .select("*, cards(*)")
-                .eq("id", collectionId)
-                .single();
-
-            if (!error && data) {
-                setCollection(data);
-                // Ensure cards are sorted by their order_index
-                const sortedCards = (data.cards as CardType[]).sort((a, b) => a.order_index - b.order_index);
-                setCards(sortedCards);
-            }
+            const collection = await collectionService.getCollectionById(collectionId);
+            setCollection(collection);
+            setCards(collection.cards);
             setLoading(false);
         }
         loadData();
@@ -89,7 +79,6 @@ export default function LearnPage({ params }: { params: Promise<{ collectionId: 
                     Next <ChevronRight className="ml-2 h-4 w-4" />
                 </Button>
             </div>
-
             <Link href="/" className="mt-12 text-sm text-muted-foreground flex items-center hover:text-primary transition-colors">
                 <LayoutDashboard className="mr-2 h-4 w-4" /> Back to Library
             </Link>

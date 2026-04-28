@@ -1,27 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { BookOpen, User, Loader2 } from "lucide-react";
-import { motion } from "framer-motion";
-import { supabase } from "@/app/lib/supabase";
 import { Collection } from "@/app/lib/types";
+import { Button } from "@/components/ui/button";
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { collectionService } from "@/services/collectionService";
+import { motion } from "framer-motion";
+import { BookOpen, Loader2, User } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function HomePage() {
   const [collections, setCollections] = useState<Collection[]>([]);
   const [loading, setLoading] = useState(true);
-
+  const router = useRouter();
   useEffect(() => {
     async function fetchPublicCollections() {
-      const { data, error } = await supabase
-        .from("collections")
-        .select("*, cards(count)")
-        .eq("is_published", true)
-        .order("created_at", { ascending: false });
-
-      if (!error && data) setCollections(data);
+      const collections = await collectionService.getAllCollections();
+      setCollections(collections);
       setLoading(false);
     }
     fetchPublicCollections();
@@ -46,35 +42,39 @@ export default function HomePage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {collections.map((col) => (
+        {collections.map((collection) => (
           <motion.div
-            key={col.id}
+            key={collection.id}
             whileHover={{ y: -5 }}
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
           >
-            <Card className="h-full border-2 hover:border-primary transition-colors flex flex-col">
+            <Card className="h-full border-2 hover:border-primary transition-colors flex flex-col cursor-pointer" onClick={() => {
+              router.push(`/learn/${collection.id}`);
+            }}>
               <CardHeader className="flex-1">
-                <CardTitle className="text-xl">{col.title}</CardTitle>
-                <CardDescription className="line-clamp-2">{col.description}</CardDescription>
+                <CardTitle className="text-xl">{collection.title}</CardTitle>
+                <CardDescription className="line-clamp-2">{collection.description}</CardDescription>
               </CardHeader>
 
               <CardFooter className="flex justify-between items-center text-sm pt-4 border-t bg-muted/20">
                 <div className="flex items-center gap-4 text-muted-foreground">
                   <span className="flex items-center gap-1 font-medium">
-                    <User size={14} className="text-primary" /> {col.author_username}
+                    <User size={14} className="text-primary" /> {collection.author_username}
                   </span>
                   <span className="flex items-center gap-1">
-                    <BookOpen size={14} /> {col.cards?.[0]?.count || 0}
+                    <BookOpen size={14} /> {collection.cards_count || 0}
                   </span>
                 </div>
-                <Link href={`/learn/${col.id}`}>
-                  <Button size="sm">Learn</Button>
-                </Link>
+                <Button asChild size="sm">
+                  <Link href={`/learn/${collection.id}`}>
+                    Learn
+                  </Link>
+                </Button>
               </CardFooter>
             </Card>
           </motion.div>
         ))}
       </div>
-    </main>
+    </main >
   );
 }

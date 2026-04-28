@@ -3,6 +3,8 @@ import { Geist, Geist_Mono, Outfit } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
+import Header from "@/components/layout/header";
+import Footer from "@/components/layout/footer";
 
 const outfit = Outfit({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -52,10 +54,12 @@ export default function RootLayout({
         "font-sans"
       )}
     >
-      <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
-        <main>
+      <body className="min-h-full flex flex-col bg-background text-foreground font-sans min-h-screen">
+        <Header />
+        <main className="flex-1">
           {children}
         </main>
+        <Footer />
         <Toaster />
       </body>
     </html>
