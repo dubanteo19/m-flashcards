@@ -45,7 +45,7 @@ export default function EditCollectionPage({ params }: { params: Promise<{ slug:
                     {slug ? "Edit Collection" : "Create New Collection"}
                 </h1>
                 <p className="text-muted-foreground">
-                    {slug ? `Updating ID: ${slug}` : "Set up your new flashcard deck"}
+                    {slug ? `Updating Collection: ${decodeURIComponent(slug)}` : "Set up your new flashcard deck"}
                 </p>
             </div>
 

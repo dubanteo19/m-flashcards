@@ -6,10 +6,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Save, AlertCircle } from "lucide-react";
-import { saveCollection } from "@/app/lib/database";
 import { toast } from "sonner";
 import { Collection } from "@/app/lib/types";
 import PromptTemplate from "./prompt-tempate";
+import { collectionService } from "@/services/collectionService";
 
 export default function CollectionForm({
     username,
@@ -33,8 +33,7 @@ export default function CollectionForm({
         setLoading(true);
         try {
             const cards = JSON.parse(jsonInput);
-            await saveCollection(username, {
-                slug: initialData?.slug,
+            await collectionService.saveCollection(username, {
                 title,
                 description: desc,
                 is_published: true,
@@ -44,6 +43,7 @@ export default function CollectionForm({
             onSuccess();
         } catch (e) {
             toast.error("Invalid JSON or Database error");
+            console.error(e);
         } finally {
             setLoading(false);
         }

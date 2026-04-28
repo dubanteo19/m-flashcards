@@ -1,19 +1,29 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { supabase } from "@/app/lib/supabase";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
-import { Loader, Loader2, LogOut, Pencil, Plus } from "lucide-react";
-import Link from "next/link";
-import { Collection } from "../lib/types";
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { collectionService } from "@/services/collectionService";
-
+import { Loader, Loader2, LogOut, Pencil, Plus, Trash } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Collection } from "../lib/types";
 export default function Dashboard() {
     const [username, setUsername] = useState<string | null>(null);
     const [collections, setCollections] = useState<Collection[]>([]);
+    const [collectionToDelete, setCollectionToDelete] = useState<string | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
 
@@ -37,7 +47,21 @@ export default function Dashboard() {
 
         initDashboard();
     }, [router]);
+    // Updated Delete Logic
+    const confirmDelete = async () => {
+        if (!collectionToDelete) return;
 
+        setIsDeleting(true);
+        try {
+            await collectionService.deleteCollection(collectionToDelete);
+            setCollections(prev => prev.filter((c) => c.slug !== collectionToDelete));
+        } catch (err) {
+            console.error("Delete error:", err);
+        } finally {
+            setIsDeleting(false);
+            setCollectionToDelete(null);
+        }
+    };
     if (loading && !username) {
         return <Loader />
     }
@@ -89,6 +113,7 @@ export default function Dashboard() {
                                         <Link href={`/dashboard/edit/${collection.slug}`}>
                                             <Button variant="outline" size="sm"><Pencil size={14} className="mr-2" /> Edit</Button>
                                         </Link>
+                                        <Button variant="outline" size="sm" onClick={() => setCollectionToDelete(collection.slug || null)}><Trash size={14} className="mr-2" /> Delete</Button>
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -96,6 +121,29 @@ export default function Dashboard() {
                     </TableBody>
                 </Table>
             </div>
+            {/* THE CONFIRMATION DIALOG */}
+            <AlertDialog open={!!collectionToDelete} onOpenChange={(open) => !open && setCollectionToDelete(null)}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This will permanently delete the collection and all its cards.
+                            This action cannot be undone.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={confirmDelete}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            disabled={isDeleting}
+                        >
+                            {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                            Delete
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 }
