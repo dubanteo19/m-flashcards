@@ -52,14 +52,11 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
                 <p className="text-muted-foreground text-sm max-w-md  mx-auto my-2 italic">
                     {collection.description}
                 </p>
-                <div className="flex items-center justify-center gap-4">
-                    <p className="text-primary font-medium text-center">
-                        Card {currentIndex + 1} of {cards.length}
-                    </p>
-                    <Button size="lg" onClick={handleShuffle}>
-                        <Shuffle className="mr-2 h-4 w-4" /> Shuffle
-                    </Button>
-                </div>
+
+                <p className="text-primary font-medium text-center">
+                    Card {currentIndex + 1} of {cards.length}
+                </p>
+
             </div>
 
             <div className="relative w-full max-w-md h-64 flex justify-center items-center">
@@ -89,7 +86,12 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
                 <Button size="lg" onClick={() => paginate(1)}>
                     Next <ChevronRight className="ml-2 h-4 w-4" />
                 </Button>
+
             </div>
+
+            <Button size="sm" variant="destructive" className="mt-4" onClick={handleShuffle}>
+                <Shuffle className="mr-2 h-4 w-4" /> Shuffle
+            </Button>
             <Link href="/" className="mt-12 text-sm text-muted-foreground flex items-center hover:text-primary transition-colors">
                 <LayoutDashboard className="mr-2 h-4 w-4" /> Back to Library
             </Link>
