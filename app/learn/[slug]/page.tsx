@@ -2,15 +2,16 @@
 
 import { Card as CardType, Collection } from "@/app/lib/types";
 import Flashcard from "@/components/flashcard";
+import Loader from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { collectionService } from "@/services/collectionService";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, LayoutDashboard, Loader } from "lucide-react";
+import { ChevronLeft, ChevronRight, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 import { use, useEffect, useState } from "react";
 
-export default function LearnPage({ params }: { params: Promise<{ collectionId: string }> }) {
-    const { collectionId } = use(params);
+export default function LearnPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = use(params);
     const [collection, setCollection] = useState<Collection | null>(null);
     const [cards, setCards] = useState<CardType[]>([]);
     const [loading, setLoading] = useState(true);
@@ -18,13 +19,13 @@ export default function LearnPage({ params }: { params: Promise<{ collectionId: 
 
     useEffect(() => {
         async function loadData() {
-            const collection = await collectionService.getCollectionById(collectionId);
+            const collection = await collectionService.getCollectionBySlug(slug);
             setCollection(collection);
             setCards(collection.cards);
             setLoading(false);
         }
         loadData();
-    }, [collectionId]);
+    }, [slug]);
 
     const currentIndex = Math.abs(page % (cards.length || 1));
 

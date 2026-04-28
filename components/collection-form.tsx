@@ -34,7 +34,7 @@ export default function CollectionForm({
         try {
             const cards = JSON.parse(jsonInput);
             await saveCollection(username, {
-                id: initialData?.id,
+                slug: initialData?.slug,
                 title,
                 description: desc,
                 is_published: true,

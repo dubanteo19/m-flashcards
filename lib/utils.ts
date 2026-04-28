@@ -11,6 +11,7 @@ export function toCollection(raw: RawCollectionResponse): Collection {
     title: raw.title,
     description: raw.description,
     author_username: raw.author_username,
+    slug: raw.slug,
     is_published: raw.is_published,
     created_at: raw.created_at,
     // Extract the number safely

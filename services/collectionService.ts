@@ -23,11 +23,11 @@ export const collectionService = {
         return (data as RawCollectionResponse[]).map(toCollection);
     },
 
-    async getCollectionById(collectionId: string) {
+    async getCollectionBySlug(slug: string) {
         const { data, error } = await supabase
             .from("collections")
             .select("*, cards(*)")
-            .eq("id", collectionId)
+            .eq("slug", slug)
             .single();
 
         if (error) throw error;

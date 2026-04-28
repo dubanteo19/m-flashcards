@@ -11,6 +11,7 @@ export interface Card {
 export interface RawCollectionResponse {
     id: string;
     title: string;
+    slug: string;
     description: string | null;
     author_username: string;
     is_published: boolean;
@@ -22,6 +23,7 @@ export interface Collection {
     title: string;
     description: string | null;
     author_username: string;
+    slug?: string;
     is_published: boolean;
     created_at: string;
     cards_count?: number;

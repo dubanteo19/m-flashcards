@@ -3,17 +3,17 @@ import { supabase } from "./supabase";
 export async function saveCollection(
     username: string,
     data: {
-        id?: string;
+        slug?: string;
         title: string;
         description: string;
         is_published: boolean;
         cards: { word: string; reading: string; meaning: string }[];
     }
 ) {
-    const slug = data.id || data.title.toLowerCase().replace(/ /g, "-") + "-" + Math.floor(Math.random() * 1000);
+    const slug = data.slug || data.title.toLowerCase().replace(/ /g, "-") + "-" + Math.floor(Math.random() * 1000);
 
     const { error: colError } = await supabase.from("collections").upsert({
-        id: slug,
+        slug: slug,
         title: data.title,
         description: data.description,
         author_username: username,
@@ -22,7 +22,7 @@ export async function saveCollection(
 
     if (colError) throw colError;
 
-    if (data.id) {
+    if (data.slug) {
         await supabase.from("cards").delete().eq("collection_id", slug);
     }
     const cardsToInsert = data.cards.map((card, index) => ({

@@ -49,7 +49,7 @@ export default function HomePage() {
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
           >
             <Card className="h-full border-2 hover:border-primary transition-colors flex flex-col cursor-pointer" onClick={() => {
-              router.push(`/learn/${collection.id}`);
+              router.push(`/learn/${collection.slug}`);
             }}>
               <CardHeader className="flex-1">
                 <CardTitle className="text-xl">{collection.title}</CardTitle>

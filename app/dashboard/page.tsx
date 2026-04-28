@@ -86,7 +86,7 @@ export default function Dashboard() {
                                     </TableCell>
                                     <TableCell>{collection.cards_count} cards</TableCell>
                                     <TableCell className="text-right">
-                                        <Link href={`/dashboard/edit/${collection.id}`}>
+                                        <Link href={`/dashboard/edit/${collection.slug}`}>
                                             <Button variant="outline" size="sm"><Pencil size={14} className="mr-2" /> Edit</Button>
                                         </Link>
                                     </TableCell>

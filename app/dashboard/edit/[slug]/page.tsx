@@ -3,27 +3,27 @@
 import { Collection } from "@/app/lib/types";
 import BackButton from "@/components/back-button";
 import CollectionForm from "@/components/collection-form";
+import Loader from "@/components/loader";
 import { collectionService } from "@/services/collectionService";
-import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
 
-export default function EditCollectionPage({ params }: { params: Promise<{ id: string }> }) {
+export default function EditCollectionPage({ params }: { params: Promise<{ slug: string }> }) {
     const resolvedParams = use(params);
-    const collectionId = resolvedParams.id;
+    const slug = resolvedParams.slug;
 
     const router = useRouter();
     const [initialData, setInitialData] = useState<Collection | null>(null);
-    const [loading, setLoading] = useState(!!collectionId);
+    const [loading, setLoading] = useState(!!slug);
     const [username, setUsername] = useState<string>("");
 
     useEffect(() => {
         const saved = localStorage.getItem("username");
         if (!saved) return router.push("/login");
-        console.log(collectionId);
-        if (collectionId) {
+        console.log(slug);
+        if (slug) {
             const fetchDetail = async () => {
-                const collection = await collectionService.getCollectionById(collectionId);
+                const collection = await collectionService.getCollectionBySlug(slug);
                 console.log(collection);
                 if (collection) {
                     setInitialData(collection);
@@ -33,7 +33,7 @@ export default function EditCollectionPage({ params }: { params: Promise<{ id: s
             };
             fetchDetail();
         }
-    }, [collectionId, router]);
+    }, [slug, router]);
 
     if (loading) return <Loader />
 
@@ -42,10 +42,10 @@ export default function EditCollectionPage({ params }: { params: Promise<{ id: s
             <BackButton />
             <div className="mb-8">
                 <h1 className="text-3xl font-bold">
-                    {collectionId ? "Edit Collection" : "Create New Collection"}
+                    {slug ? "Edit Collection" : "Create New Collection"}
                 </h1>
                 <p className="text-muted-foreground">
-                    {collectionId ? `Updating ID: ${collectionId}` : "Set up your new flashcard deck"}
+                    {slug ? `Updating ID: ${slug}` : "Set up your new flashcard deck"}
                 </p>
             </div>
 
