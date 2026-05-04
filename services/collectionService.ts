@@ -36,6 +36,8 @@ export const collectionService = {
     async saveCollection(
         username: string,
         data: {
+            id?: string;
+            slug?: string;
             title: string;
             description: string;
             is_published: boolean;
@@ -43,7 +45,8 @@ export const collectionService = {
         }
     ) {
         // 1. Generate the URL-friendly slug
-        const slug = data.title.toLowerCase().replace(/ /g, "-") + "-" + Math.floor(Math.random() * 1000);
+        const slug = data.slug ||
+            `${data.title.toLowerCase().trim().replace(/\s+/g, "-")}-${Math.floor(1000 + Math.random() * 9000)}`;
 
         // 2. Upsert the collection and SELECT the returned ID (UUID)
         const { data: collectionRow, error: colError } = await supabase
@@ -64,16 +67,7 @@ export const collectionService = {
         if (!collectionRow) throw new Error("Failed to retrieve collection ID");
 
         const collectionUuid = collectionRow.id;
-
-        // 3. Delete existing cards using the UUID, not the slug
-        const { error: delError } = await supabase
-            .from("cards")
-            .delete()
-            .eq("collection_id", collectionUuid);
-
-        if (delError) throw delError;
-
-        // 4. Map cards to the UUID
+        // 3. Map cards to the UUID
         const cardsToInsert = data.cards.map((card, index) => ({
             collection_id: collectionUuid, // Use the UUID here!
             word: card.word,

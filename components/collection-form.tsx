@@ -1,51 +1,56 @@
 "use client";
 
-import { useState } from "react";
+import { useSaveCollection } from "@/app/hooks/useColleciton";
+import { Collection } from "@/app/lib/types";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Sparkles, Save, AlertCircle } from "lucide-react";
+import { AlertCircle, Save, Sparkles } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
-import { Collection } from "@/app/lib/types";
 import PromptTemplate from "./prompt-tempate";
-import { collectionService } from "@/services/collectionService";
+import { getCookie } from "cookies-next";
 
-export default function CollectionForm({
-    username,
-    initialData,
-    onSuccess
-}: {
-    username: string;
+interface CollectionFormProps {
     initialData?: Collection;
-    onSuccess: () => void
-}) {
+}
+export default function CollectionForm({ initialData }: CollectionFormProps) {
+    const username = getCookie("username") as string;
     const [title, setTitle] = useState(initialData?.title || "");
     const [desc, setDesc] = useState(initialData?.description || "");
     const [jsonInput, setJsonInput] = useState(
         initialData?.cards ? JSON.stringify(initialData.cards, null, 2) : ""
     );
-    const [loading, setLoading] = useState(false);
+    const { mutate: saveCollection, isPending } = useSaveCollection();
 
     const handleSubmit = async () => {
         if (!title || !jsonInput) return toast.error("Title and Cards are required");
 
-        setLoading(true);
         try {
             const cards = JSON.parse(jsonInput);
-            await collectionService.saveCollection(username, {
-                title,
-                description: desc,
-                is_published: true,
-                cards
+            saveCollection({
+                username,
+                data: {
+                    id: initialData?.id,
+                    slug: initialData?.slug,
+                    title,
+                    description: desc,
+                    is_published: true,
+                    cards
+                }
+            }, {
+                onSuccess: () => {
+                    toast.success("Collection saved!");
+                },
+                onError: (error) => {
+                    toast.error("Database error. Check your connection.");
+                    console.error(error);
+                }
             });
-            toast.success("Collection saved!");
-            onSuccess();
+
         } catch (e) {
-            toast.error("Invalid JSON or Database error");
-            console.error(e);
-        } finally {
-            setLoading(false);
+            toast.error("Invalid JSON format. Please check your brackets.");
         }
     };
 
@@ -90,8 +95,8 @@ export default function CollectionForm({
                 </TabsContent>
             </Tabs>
 
-            <Button onClick={handleSubmit} className="w-full" disabled={loading}>
-                {loading ? "Saving..." : <><Save size={18} className="mr-2" /> Save Collection</>}
+            <Button onClick={handleSubmit} className="w-full" disabled={isPending}>
+                {isPending ? "Saving..." : <><Save size={18} className="mr-2" /> Save Collection</>}
             </Button>
         </div>
     );

@@ -1,5 +1,6 @@
 "use client";
 
+import Loader from "@/components/loader";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -13,57 +14,30 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { collectionService } from "@/services/collectionService";
+import { useAuth } from "@/context/AuthContext";
+import { useDeleteCollection, useUserCollections } from "@/hooks/useColleciton";
 import { BookOpen, Loader2, LogOut, Pencil, Plus, Trash } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Collection } from "../lib/types";
-import Loader from "@/components/loader";
+import { useState } from "react";
 export default function Dashboard() {
-    const [username, setUsername] = useState<string | null>(null);
-    const [collections, setCollections] = useState<Collection[]>([]);
+    const { username, logout } = useAuth();
+    // 2. Use TanStack Query to fetch collections
+    const { data: collections = [], isLoading } = useUserCollections(username ?? "");
     const [collectionToDelete, setCollectionToDelete] = useState<string | null>(null);
-    const [isDeleting, setIsDeleting] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const router = useRouter();
-
-    useEffect(() => {
-        const savedUsername = localStorage.getItem("username");
-        if (!savedUsername) {
-            router.push("/login");
-            return;
-        }
-        const initDashboard = async () => {
-            try {
-                const collections = await collectionService.getByUsername(savedUsername);
-                setUsername(savedUsername);
-                setCollections(collections);
-            } catch (err) {
-                console.error("Dashboard init error:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        initDashboard();
-    }, [router]);
+    const { mutate: deleteCollection, isPending: isDeleting } = useDeleteCollection();
+    // 3. Use Mutation for deletion
     // Updated Delete Logic
     const confirmDelete = async () => {
-        if (!collectionToDelete) return;
-
-        setIsDeleting(true);
+        if (!collectionToDelete) return
         try {
-            await collectionService.deleteCollection(collectionToDelete);
-            setCollections(prev => prev.filter((c) => c.slug !== collectionToDelete));
+            deleteCollection(collectionToDelete);
         } catch (err) {
             console.error("Delete error:", err);
         } finally {
-            setIsDeleting(false);
             setCollectionToDelete(null);
         }
     };
-    if (loading && !username) {
+    if (isLoading) {
         return <Loader />
     }
 
@@ -78,10 +52,7 @@ export default function Dashboard() {
                     <Link href="/dashboard/new">
                         <Button className="gap-2"><Plus size={18} /> New Collection</Button>
                     </Link>
-                    <Button variant="outline" onClick={() => {
-                        localStorage.removeItem("username");
-                        router.push("/login");
-                    }}><LogOut size={16} /></Button>
+                    <Button variant="outline" onClick={logout}><LogOut size={16} /></Button>
                 </div>
             </div>
 
@@ -96,7 +67,7 @@ export default function Dashboard() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {loading ? (
+                        {isLoading ? (
                             <TableRow><TableCell colSpan={4} className="h-32 text-center"><Loader2 className="animate-spin inline" /></TableCell></TableRow>
                         ) : collections.length === 0 ? (
                             <TableRow><TableCell colSpan={4} className="h-32 text-center text-muted-foreground">No decks yet.</TableCell></TableRow>

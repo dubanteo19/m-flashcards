@@ -1,30 +1,18 @@
 "use client";
 
-import { Collection } from "@/app/lib/types";
 import Loader from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { collectionService } from "@/services/collectionService";
+import { useCollections } from "@/hooks/useColleciton";
 import { motion } from "framer-motion";
 import { BookOpen, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 export default function HomePage() {
-  const [collections, setCollections] = useState<Collection[]>([]);
-  const [loading, setLoading] = useState(true);
   const router = useRouter();
-  useEffect(() => {
-    async function fetchPublicCollections() {
-      const collections = await collectionService.getAllCollections();
-      setCollections(collections);
-      setLoading(false);
-    }
-    fetchPublicCollections();
-  }, []);
-
-  if (loading) return <Loader />
+  const { data: collections, isLoading, refetch, isFetching } = useCollections();
+  if (isLoading) return <Loader />
   return (
     <main className="container mx-auto py-10 px-4">
       <div className="flex justify-between items-center mb-8">
@@ -33,12 +21,12 @@ export default function HomePage() {
           <p className="text-muted-foreground text-lg">Browse public collections and start learning.</p>
         </div>
         <Link href="/dashboard">
-          <Button variant="outline">Contributor Dashboard</Button>
+          <Button disabled={isFetching} variant="outline">Contributor Dashboard</Button>
         </Link>
       </div>
-
+      <Button className="my-2" onClick={async () => await refetch()}> {isFetching ? "Refreshing..." : "Refresh"}</Button>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {collections.map((collection) => (
+        {collections?.map((collection) => (
           <motion.div
             key={collection.id}
             whileHover={{ y: -5 }}

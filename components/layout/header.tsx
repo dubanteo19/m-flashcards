@@ -6,7 +6,7 @@ export default function Header() {
             <Link href="/" className="text-2xl font-bold text-primary">
                 <h1>M Flashcards</h1>
             </Link>
-            <span className="text-sm text-muted-foreground">Small app to help you learn Japanese vocabulary</span>
+            <span className="text-sm text-muted-foreground">Small app to help you learn vocabulary</span>
         </header>
     );
 }

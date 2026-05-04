@@ -1,22 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Languages } from "lucide-react";
-
+import { setCookie } from "cookies-next";
 export default function LoginPage() {
     const [username, setUsername] = useState("");
     const router = useRouter();
 
-    const handleLogin = (e: React.SyntheticEvent<HTMLFormElement>) => {
+    const handleLogin = (e: SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (username.trim()) {
-            localStorage.setItem("username", username.trim());
-            router.push("/dashboard");
-        }
+        const trimmedName = username.trim();
+        if (!trimmedName) return;
+        setCookie('username', trimmedName, {
+            maxAge: 60 * 60 * 24 * 7, // 1 week
+            path: '/',
+            sameSite: 'lax'
+        });
+        router.push('/dashboard');
     };
 
     return (
@@ -30,7 +34,7 @@ export default function LoginPage() {
                     </div>
                     <CardTitle className="text-2xl font-bold">Contributor Login</CardTitle>
                     <CardDescription>Enter your username to manage your collections</CardDescription>
-                </CardHeader>-
+                </CardHeader>
                 <form onSubmit={handleLogin}>
                     <CardContent>
                         <Input

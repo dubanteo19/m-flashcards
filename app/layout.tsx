@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import Providers from "./provider";
 
 const outfit = Outfit({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -54,14 +55,16 @@ export default function RootLayout({
         "font-sans"
       )}
     >
-      <body className="min-h-full flex flex-col bg-background text-foreground font-sans min-h-screen">
-        <Header />
-        <main className="flex-1">
-          {children}
-        </main>
-        <Footer />
-        <Toaster />
-      </body>
+      <Providers>
+        <body className="min-h-full flex flex-col bg-background text-foreground font-sans min-h-screen">
+          <Header />
+          <main className="flex-1">
+            {children}
+          </main>
+          <Footer />
+          <Toaster />
+        </body>
+      </Providers>
     </html>
   );
 }
