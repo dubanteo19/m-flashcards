@@ -1,3 +1,5 @@
+import { LanguageCode } from "./enums";
+
 export interface Card {
     id: string; // UUID from Supabase
     collection_id: string; // Foreign key
@@ -8,7 +10,8 @@ export interface Card {
     created_at?: string;
 }
 
-export interface RawCollectionResponse {
+// The source of truth for the core data
+export interface CollectionBase {
     id: string;
     title: string;
     slug: string;
@@ -16,17 +19,17 @@ export interface RawCollectionResponse {
     author_username: string;
     is_published: boolean;
     created_at: string;
-    cards: { count: number }[]; // Supabase returns an array of objects for counts
+    language: LanguageCode;
 }
-export interface Collection {
-    id: string; // Friendly Slug (e.g., "it-vocab-123")
-    title: string;
-    description: string | null;
-    author_username: string;
-    slug?: string;
-    is_published: boolean;
-    created_at: string;
-    cards_count?: number;
+
+// Exactly what comes from the Supabase query
+export interface RawCollectionResponse extends CollectionBase {
+    cards: { count: number }[];
+}
+
+// What your UI/View actually uses
+export interface Collection extends CollectionBase {
+    cards_count: number;
     cards?: Card[];
 }
 // The exact shape Supabase returns for .select("*, cards(count)")

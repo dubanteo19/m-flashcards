@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { collectionService } from "@/services/collectionService";
+import { Collection } from "@/app/lib/types";
 
 export function useCollections() {
     return useQuery({
@@ -12,6 +13,13 @@ export function useUserCollections(username: string) {
     return useQuery({
         queryKey: ["user-collections"],
         queryFn: () => collectionService.getByUsername(username),
+    });
+}
+
+export function useCollectionBySlug(slug: string) {
+    return useQuery<Collection>({
+        queryKey: ["slug-collections", slug],
+        queryFn: () => collectionService.getBySlug(slug),
     });
 }
 export function useSaveCollection() {

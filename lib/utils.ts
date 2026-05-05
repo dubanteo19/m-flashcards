@@ -9,14 +9,23 @@ export function toCollection(raw: RawCollectionResponse): Collection {
   return {
     id: raw.id,
     title: raw.title,
-    description: raw.description,
+    description: raw.description,jkj
     author_username: raw.author_username,
     slug: raw.slug,
     is_published: raw.is_published,
     created_at: raw.created_at,
+    language: raw.language,
     // Extract the number safely
     cards_count: raw.cards?.[0]?.count ?? 0,
     // Explicitly set to undefined since this specific query only returns the count
     cards: undefined
   };
 }
+export const shuffleArray = <T>(array: T[]) => {
+  const newArr = [...array];
+  for (let i = newArr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+  }
+  return newArr;
+};

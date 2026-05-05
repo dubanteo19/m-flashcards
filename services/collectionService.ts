@@ -22,7 +22,7 @@ export const collectionService = {
         if (error) throw error;
         return (data as RawCollectionResponse[]).map(toCollection);
     },
-    async getCollectionBySlug(slug: string) {
+    async getBySlug(slug: string) {
         const decodedSlug = decodeURIComponent(slug);
         const { data, error } = await supabase
             .from("collections")

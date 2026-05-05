@@ -1,6 +1,8 @@
 "use client";
 
+import { Flag } from "@/components/flag-icon";
 import Loader from "@/components/loader";
+import { ActionButton } from "@/components/ui/action-button";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -12,7 +14,7 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { LinkButton } from "@/components/ui/link-button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useAuth } from "@/context/AuthContext";
 import { useDeleteCollection, useUserCollections } from "@/hooks/useColleciton";
@@ -21,12 +23,9 @@ import Link from "next/link";
 import { useState } from "react";
 export default function Dashboard() {
     const { username, logout } = useAuth();
-    // 2. Use TanStack Query to fetch collections
     const { data: collections = [], isLoading } = useUserCollections(username ?? "");
     const [collectionToDelete, setCollectionToDelete] = useState<string | null>(null);
     const { mutate: deleteCollection, isPending: isDeleting } = useDeleteCollection();
-    // 3. Use Mutation for deletion
-    // Updated Delete Logic
     const confirmDelete = async () => {
         if (!collectionToDelete) return
         try {
@@ -49,10 +48,8 @@ export default function Dashboard() {
                     <p className="text-muted-foreground text-lg">Logged in as {username}</p>
                 </div>
                 <div className="flex gap-3">
-                    <Link href="/dashboard/new">
-                        <Button className="gap-2"><Plus size={18} /> New Collection</Button>
-                    </Link>
-                    <Button variant="outline" onClick={logout}><LogOut size={16} /></Button>
+                    <LinkButton href="dashboard/new"><Plus size={18} /> New Collection</LinkButton>
+                    <ActionButton label="Log out" variant="outline" onClick={logout}><LogOut size={16} /></ActionButton>
                 </div>
             </div>
 
@@ -63,6 +60,7 @@ export default function Dashboard() {
                             <TableHead>Collection</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead>Cards</TableHead>
+                            <TableHead>Language</TableHead>
                             <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -81,20 +79,21 @@ export default function Dashboard() {
                                         </Badge>
                                     </TableCell>
                                     <TableCell>{collection.cards_count} cards</TableCell>
+                                    <TableCell><Flag language={collection.language} /></TableCell>
                                     <TableCell className="text-right">
-                                        <Button asChild variant="outline" size="sm">
+                                        <ActionButton variant="outline" size="sm" label="Edit">
                                             <Link href={`/dashboard/edit/${collection.slug}`}>
-                                                <Pencil size={14} className="mr-2" /> Edit
+                                                <Pencil size={14} />
                                             </Link>
-                                        </Button>
-                                        <Button variant="destructive" size="sm" onClick={() => setCollectionToDelete(collection.slug || null)}>
+                                        </ActionButton>
+                                        <ActionButton label="Delete" variant="destructive" size="sm" onClick={() => setCollectionToDelete(collection.slug || null)}>
                                             <Trash size={14} />
-                                        </Button>
-                                        <Button asChild size="sm">
+                                        </ActionButton>
+                                        <ActionButton size="sm" label="Learn">
                                             <Link href={`/learn/${collection.slug}`}>
-                                                <BookOpen size={14} className="mr-2" /> Learn
+                                                <BookOpen size={14} />
                                             </Link>
-                                        </Button>
+                                        </ActionButton>
                                     </TableCell>
                                 </TableRow>
                             ))

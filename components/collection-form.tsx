@@ -1,22 +1,22 @@
 "use client";
 
-import { useSaveCollection } from "@/app/hooks/useColleciton";
 import { Collection } from "@/app/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/context/AuthContext";
 import { AlertCircle, Save, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import PromptTemplate from "./prompt-tempate";
-import { getCookie } from "cookies-next";
+import { useSaveCollection } from "@/hooks/useColleciton";
 
 interface CollectionFormProps {
     initialData?: Collection;
 }
 export default function CollectionForm({ initialData }: CollectionFormProps) {
-    const username = getCookie("username") as string;
+    const { username } = useAuth();
     const [title, setTitle] = useState(initialData?.title || "");
     const [desc, setDesc] = useState(initialData?.description || "");
     const [jsonInput, setJsonInput] = useState(

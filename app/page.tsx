@@ -1,12 +1,13 @@
 "use client";
 
+import { Flag } from "@/components/flag-icon";
 import Loader from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { LinkButton } from "@/components/ui/link-button";
 import { useCollections } from "@/hooks/useColleciton";
 import { motion } from "framer-motion";
 import { BookOpen, User } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function HomePage() {
@@ -20,9 +21,7 @@ export default function HomePage() {
           <h1 className="text-4xl font-bold tracking-tight">M Flashcards</h1>
           <p className="text-muted-foreground text-lg">Browse public collections and start learning.</p>
         </div>
-        <Link href="/dashboard">
-          <Button disabled={isFetching} variant="outline">Contributor Dashboard</Button>
-        </Link>
+        <LinkButton href="/dashboard" disabled={isFetching} variant="outline">Contributor Dashboard</LinkButton>
       </div>
       <Button className="my-2" onClick={async () => await refetch()}> {isFetching ? "Refreshing..." : "Refresh"}</Button>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -42,18 +41,21 @@ export default function HomePage() {
 
               <CardFooter className="flex justify-between items-center text-sm pt-4 border-t bg-muted/20">
                 <div className="flex items-center gap-4 text-muted-foreground">
+                  {/* The Author */}
                   <span className="flex items-center gap-1 font-medium">
                     <User size={14} className="text-primary" /> {collection.author_username}
                   </span>
+                  {/* Language SVG Icon */}
+                  <div className="shrink-0">
+                    <Flag language={collection.language} />
+                  </div>
+
+                  {/* Cards Count */}
                   <span className="flex items-center gap-1">
                     <BookOpen size={14} /> {collection.cards_count || 0}
                   </span>
                 </div>
-                <Button asChild size="sm">
-                  <Link href={`/learn/${collection.id}`}>
-                    Learn
-                  </Link>
-                </Button>
+                <LinkButton href={`/learn/${collection.slug}`}>Learn</LinkButton>
               </CardFooter>
             </Card>
           </motion.div>

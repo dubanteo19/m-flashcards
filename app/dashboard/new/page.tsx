@@ -2,8 +2,10 @@
 
 import BackButton from "@/components/back-button";
 import CollectionForm from "@/components/collection-form";
+import { useAuth } from "@/context/AuthContext";
 
 export default function NewCollectionPage() {
+    const { username } = useAuth();
     return (
         <div className="container mx-auto py-10 max-w-3xl px-4">
             <BackButton />
@@ -17,8 +19,7 @@ export default function NewCollectionPage() {
             </div>
 
             <div className="bg-card border rounded-xl p-6 shadow-sm">
-                <CollectionForm
-                />
+                <CollectionForm />
             </div>
         </div>
     );
