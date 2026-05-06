@@ -10,13 +10,14 @@ import { LinkButton } from "@/components/ui/link-button";
 import { useCollectionBySlug } from "@/hooks/useColleciton";
 import { shuffleArray } from "@/lib/utils";
 import { historyService } from "@/services/historyService";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, PanInfo } from "framer-motion";
 import { ChevronLeft, ChevronRight, Shuffle } from "lucide-react";
-import { use, useEffect, useState } from "react";
+import { use, useCallback, useEffect, useState } from "react";
 
 export default function LearnPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = use(params);
     const { data: collection, isLoading } = useCollectionBySlug(slug);
+    const [isDragging, setIsDragging] = useState(false);
     const [shuffledCards, setShuffledCards] = useState<Card[] | null>(null);
     const [[page, direction], setPage] = useState([0, 0]);
     const cards = shuffledCards || collection?.cards || [];
@@ -25,10 +26,35 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
         setShuffledCards(shuffleArray(cards));
         setPage([0, 0]);
     };
-    const paginate = (newDirection: number) => {
+    const paginate = useCallback((newDirection: number) => {
         setPage([page + newDirection, newDirection]);
+    }, [page]);
+
+    // 1. Keyboard Navigation Logic
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "ArrowLeft") paginate(-1);
+            if (e.key === "ArrowRight") paginate(1);
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [paginate]);
+    // 2. Swipe Logic
+    const swipeConfidenceThreshold = 10000;
+    const swipePower = (offset: number, velocity: number) => {
+        return Math.abs(offset) * velocity;
     };
 
+    const onDragEnd = (e: any, { offset, velocity }: PanInfo) => {
+        const swipe = swipePower(offset.x, velocity.x);
+
+        if (swipe < -swipeConfidenceThreshold) {
+            paginate(1);
+        } else if (swipe > swipeConfidenceThreshold) {
+            paginate(-1);
+        }
+    };
     useEffect(() => {
         if (collection) {
             historyService.addToHistory(collection);
@@ -73,7 +99,13 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
                             x: { type: "spring", stiffness: 300, damping: 30 },
                             opacity: { duration: 0.2 },
                         }}
-                        className="w-full"
+                        drag="x"
+                        onDragStart={() => setIsDragging(true)}
+                        onDragEnd={(e, info) => {
+                            onDragEnd(e, info);
+                            setTimeout(() => setIsDragging(false), 100);
+                        }}
+                        className={`w-full ${isDragging ? "pointer-events-none" : "pointer-events-auto"}`}
                     >
                         <Flashcard card={cards[currentIndex]} />
                     </motion.div>
