@@ -6,9 +6,11 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import Link from "next/link";
 
 interface ActionButtonProps extends ButtonProps {
     label: string;
+    href?: string;
     side?: "top" | "bottom" | "left" | "right";
     children: ReactNode;
 }
@@ -16,22 +18,22 @@ interface ActionButtonProps extends ButtonProps {
 export const ActionButton = ({
     label,
     children,
+    href,
     side = "top",
     ...props
 }: ActionButtonProps) => {
     return (
-        <TooltipProvider>
-            <Tooltip delayDuration={300}>
-                <TooltipTrigger asChild>
-                    <Button {...props}>
-                        {children}
-                        <span className="sr-only">{label}</span>
-                    </Button>
-                </TooltipTrigger>
-                <TooltipContent side={side}>
-                    <p>{label}</p>
-                </TooltipContent>
-            </Tooltip>
-        </TooltipProvider>
+
+        <Tooltip delayDuration={300}>
+            <TooltipTrigger asChild>
+                <Button asChild={Boolean(href)} {...props} aria-label={label}>
+                    {href ? <Link href={href}>{children}</Link> : children}
+                </Button>
+            </TooltipTrigger>
+            <TooltipContent side={side}>
+                <p>{label}</p>
+            </TooltipContent>
+        </Tooltip>
+
     );
 };

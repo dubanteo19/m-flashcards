@@ -26,6 +26,7 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
 
     const handleSubmit = async () => {
         if (!title || !jsonInput) return toast.error("Title and Cards are required");
+        if (!username) return toast.error("You must be logged in to save a collection");
 
         try {
             const cards = JSON.parse(jsonInput);

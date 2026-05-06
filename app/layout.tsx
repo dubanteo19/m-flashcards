@@ -5,8 +5,7 @@ import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
-import Providers from "./provider";
-
+import { Providers } from "./providers/providers";
 const outfit = Outfit({ subsets: ['latin'], variable: '--font-sans' });
 
 const geistSans = Geist({
@@ -22,15 +21,15 @@ const geistMono = Geist_Mono({
 // --- UPDATED METADATA ---
 export const metadata: Metadata = {
   title: {
-    default: "M Flashcards | Learn Japanese Fast",
+    default: "M Flashcards | Learn vocabulary fast",
     template: "%s | M Flashcards"
   },
-  description: "A community-driven platform to learn Japanese vocabulary. Create, share, and study flashcard collections with ease.",
-  keywords: ["Japanese", "Flashcards", "JLPT", "Kanji", "Learning", "Vocabulary"],
+  description: "A community-driven platform to learn multiple languages vocabulary. Create, share, and study flashcard collections with ease.",
+  keywords: ["Vocabulary", "Flashcards", "Learning", "Multiple Languages", "M Flashcards"],
   authors: [{ name: "M Flashcards Team" }],
   openGraph: {
     title: "M Flashcards",
-    description: "Master Japanese vocabulary with our community-sourced flashcards.",
+    description: "Master vocabulary with our community-sourced flashcards.",
     type: "website",
     locale: "en_US",
     url: "https://m-flashcards.dbt19.store",
@@ -55,6 +54,7 @@ export default function RootLayout({
         "font-sans"
       )}
     >
+
       <Providers>
         <body className="min-h-full flex flex-col bg-background text-foreground font-sans min-h-screen">
           <Header />

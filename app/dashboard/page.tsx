@@ -81,18 +81,14 @@ export default function Dashboard() {
                                     <TableCell>{collection.cards_count} cards</TableCell>
                                     <TableCell><Flag language={collection.language} /></TableCell>
                                     <TableCell className="text-right">
-                                        <ActionButton variant="outline" size="sm" label="Edit">
-                                            <Link href={`/dashboard/edit/${collection.slug}`}>
-                                                <Pencil size={14} />
-                                            </Link>
+                                        <ActionButton variant="outline" size="sm" label="Edit" href={`/dashboard/edit/${collection.slug}`}>
+                                            <Pencil size={14} />
                                         </ActionButton>
                                         <ActionButton label="Delete" variant="destructive" size="sm" onClick={() => setCollectionToDelete(collection.slug || null)}>
                                             <Trash size={14} />
                                         </ActionButton>
-                                        <ActionButton size="sm" label="Learn">
-                                            <Link href={`/learn/${collection.slug}`}>
-                                                <BookOpen size={14} />
-                                            </Link>
+                                        <ActionButton size="sm" label="Learn" href={`/learn/${collection.slug}`}>
+                                            <BookOpen size={14} />
                                         </ActionButton>
                                     </TableCell>
                                 </TableRow>

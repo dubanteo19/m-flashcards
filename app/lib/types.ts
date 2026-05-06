@@ -30,10 +30,15 @@ export interface RawCollectionResponse extends CollectionBase {
 // What your UI/View actually uses
 export interface Collection extends CollectionBase {
     cards_count: number;
+    isFavorited?: boolean; // Optional, can be set on the client side
+    lastViewed?: number; // Optional, for history tracking
     cards?: Card[];
 }
-// The exact shape Supabase returns for .select("*, cards(count)")
-
+export interface CollectionFilters {
+    language?: string;
+    author?: string;
+    searchTerm?: string;
+}
 export interface FlashcardView {
     word: string;
     reading: string;

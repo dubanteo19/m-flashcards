@@ -19,7 +19,7 @@ const asyncPersister = typeof window !== "undefined"
     })
     : null;
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+export default function ReactQueryProvider({ children }: { children: React.ReactNode }) {
     // If we're on the server, just render the children without the persister logic
     if (!asyncPersister) {
         return (

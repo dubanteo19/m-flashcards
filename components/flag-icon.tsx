@@ -164,5 +164,9 @@ interface FlagProps {
 
 export const Flag = ({ language, size = 24 }: FlagProps) => {
     const Component = LanguageFlags[language];
-    return <Component size={size} />;
+    return (
+        <div className='shadow'>
+            <Component size={size} />
+        </div>
+    )
 };

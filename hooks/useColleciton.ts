@@ -1,16 +1,16 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { collectionService } from "@/services/collectionService";
-import { Collection } from "@/app/lib/types";
+import { Collection, CollectionFilters } from "@/app/lib/types";
 
-export function useCollections() {
+export function useCollections(filters: CollectionFilters) {
     return useQuery({
-        queryKey: ["collections"], // The unique key for caching
-        queryFn: () => collectionService.getAllCollections(),
+        queryKey: ["collections", filters], // React Query hashes the object automatically
+        queryFn: () => collectionService.getAllCollections(filters),
     });
 }
 
 export function useUserCollections(username: string) {
-    return useQuery({
+    return useQuery<Collection[]>({
         queryKey: ["user-collections"],
         queryFn: () => collectionService.getByUsername(username),
     });

@@ -1,5 +1,5 @@
 import { supabase } from "@/app/lib/supabase";
-import { RawCollectionResponse } from "@/app/lib/types";
+import { CollectionFilters, RawCollectionResponse } from "@/app/lib/types";
 import { toCollection } from "@/lib/utils";
 
 export const collectionService = {
@@ -13,13 +13,18 @@ export const collectionService = {
         if (error) throw error;
         return (data as RawCollectionResponse[]).map(toCollection);
     },
-    async getAllCollections() {
-        const { data, error } = await supabase
+    async getAllCollections(filters: CollectionFilters = {}) {
+        let query = supabase
             .from("collections")
             .select("*, cards(count)")
             .order("created_at", { ascending: false });
+        if (filters.language) query = query.eq("language", filters.language);
+        if (filters.author) query = query.eq("author_username", filters.author);
+        if (filters.searchTerm) query = query.ilike("title", `%${filters.searchTerm}%`);
 
+        const { data, error } = await query;
         if (error) throw error;
+
         return (data as RawCollectionResponse[]).map(toCollection);
     },
     async getBySlug(slug: string) {

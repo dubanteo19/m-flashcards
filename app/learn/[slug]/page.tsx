@@ -4,20 +4,21 @@ import { Card } from "@/app/lib/types";
 import { Flag } from "@/components/flag-icon";
 import Flashcard from "@/components/flashcard";
 import Loader from "@/components/loader";
+import { ActionButton } from "@/components/ui/action-button";
 import { Button } from "@/components/ui/button";
 import { LinkButton } from "@/components/ui/link-button";
 import { useCollectionBySlug } from "@/hooks/useColleciton";
 import { shuffleArray } from "@/lib/utils";
+import { historyService } from "@/services/historyService";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Shuffle } from "lucide-react";
-import { use, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 export default function LearnPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = use(params);
     const { data: collection, isLoading } = useCollectionBySlug(slug);
     const [shuffledCards, setShuffledCards] = useState<Card[] | null>(null);
     const [[page, direction], setPage] = useState([0, 0]);
-
     const cards = shuffledCards || collection?.cards || [];
     const currentIndex = ((page % cards.length) + cards.length) % cards.length;
     const handleShuffle = () => {
@@ -27,6 +28,12 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
     const paginate = (newDirection: number) => {
         setPage([page + newDirection, newDirection]);
     };
+
+    useEffect(() => {
+        if (collection) {
+            historyService.addToHistory(collection);
+        }
+    }, [collection]);
 
     if (isLoading) return <Loader />
     if (!collection || cards.length === 0) return (
@@ -38,8 +45,8 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
 
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4 overflow-hidden">
-            <div className="mb-4">
-                <Flag size={100} language={collection.language} />
+            <div className="py-2">
+                <Flag size={120} language={collection.language} />
             </div>
             <div className="mb-8 ">
                 <h2 className="text-2xl font-bold text-center">{collection.title}</h2>
@@ -82,12 +89,10 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
                 </Button>
 
             </div>
-
-            <Button size="sm" variant="destructive" className="mt-4" onClick={handleShuffle}>
-                <Shuffle className="mr-2 h-4 w-4" /> Shuffle
-            </Button>
-            <LinkButton className="mt-2" href="/">Back to Library</LinkButton>
-        </div>
+            <ActionButton label="Shuffle" size="sm" variant="destructive" className="mt-4" onClick={handleShuffle}>
+                <Shuffle className="size-4" />
+            </ActionButton>
+        </div >
     );
 }
 
