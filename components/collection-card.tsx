@@ -9,6 +9,7 @@ import { Flag } from "./flag-icon";
 import { ActionButton } from "./ui/action-button";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { LinkButton } from "./ui/link-button";
+import { ROUTES } from "@/app/lib/constants";
 
 type CardVariant = "explore" | "history";
 
@@ -63,7 +64,7 @@ export const CollectionCard = ({ collection, variant = "explore", onToggleFavori
                         <HeartIcon size={20} className={cn(isFavorited && "fill-current")} />
                     </motion.div>
                 </ActionButton>
-                <LinkButton href={`/learn/${collection.slug}`}>Learn</LinkButton>
+                <LinkButton href={ROUTES.LEARN(collection.slug)}>Learn</LinkButton>
             </div>
         );
     };
@@ -75,7 +76,7 @@ export const CollectionCard = ({ collection, variant = "explore", onToggleFavori
                 ? "bg-slate-50/50 border-slate-200 shadow-none"
                 : "bg-white border-transparent hover:border-primary shadow-sm"
         )}>
-            <Link className="absolute inset-0 z-0" href={`/learn/${collection.slug}`} />
+            <Link className="absolute inset-0 z-0" href={ROUTES.LEARN(collection.slug)} />
             <CardHeader className="flex-1">
                 <CardTitle className={cn(
                     "text-xl transition-colors",

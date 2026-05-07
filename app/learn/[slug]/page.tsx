@@ -1,5 +1,6 @@
 "use client";
 
+import { ROUTES } from "@/app/lib/constants";
 import { Card } from "@/app/lib/types";
 import { Flag } from "@/components/flag-icon";
 import Flashcard from "@/components/flashcard";
@@ -8,7 +9,7 @@ import { ActionButton } from "@/components/ui/action-button";
 import { Button } from "@/components/ui/button";
 import { LinkButton } from "@/components/ui/link-button";
 import { useCollectionBySlug } from "@/hooks/useColleciton";
-import { shuffleArray } from "@/lib/utils";
+import { cn, shuffleArray } from "@/lib/utils";
 import { historyService } from "@/services/historyService";
 import { AnimatePresence, motion, PanInfo } from "framer-motion";
 import { ChevronLeft, ChevronRight, Shuffle } from "lucide-react";
@@ -65,7 +66,7 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
     if (!collection || cards.length === 0) return (
         <div className="min-h-screen flex flex-col items-center justify-center">
             <p className="mb-4">No cards found in this collection.</p>
-            <LinkButton href="/">Back to Library</LinkButton>
+            <LinkButton href={ROUTES.DASHBOARD}>Back to Library</LinkButton>
         </div>
     )
 
@@ -105,7 +106,7 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
                             onDragEnd(e, info);
                             setTimeout(() => setIsDragging(false), 100);
                         }}
-                        className={`w-full ${isDragging ? "pointer-events-none" : "pointer-events-auto"}`}
+                        className={cn("w-full", isDragging ? "pointer-events-none" : "pointer-events-auto")}
                     >
                         <Flashcard card={cards[currentIndex]} />
                     </motion.div>

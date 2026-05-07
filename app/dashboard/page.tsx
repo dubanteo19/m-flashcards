@@ -21,6 +21,7 @@ import { useDeleteCollection, useUserCollections } from "@/hooks/useColleciton";
 import { BookOpen, Loader2, LogOut, Pencil, Plus, Trash } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { ROUTES } from "../lib/constants";
 export default function Dashboard() {
     const { username, logout } = useAuth();
     const { data: collections = [], isLoading } = useUserCollections(username ?? "");
@@ -48,7 +49,7 @@ export default function Dashboard() {
                     <p className="text-muted-foreground text-lg">Logged in as {username}</p>
                 </div>
                 <div className="flex gap-3">
-                    <LinkButton href="dashboard/new"><Plus size={18} /> New Collection</LinkButton>
+                    <LinkButton href={ROUTES.DASHBOARD_NEW}><Plus size={18} /> New Collection</LinkButton>
                     <ActionButton label="Log out" variant="outline" onClick={logout}><LogOut size={16} /></ActionButton>
                 </div>
             </div>
@@ -81,13 +82,13 @@ export default function Dashboard() {
                                     <TableCell>{collection.cards_count} cards</TableCell>
                                     <TableCell><Flag language={collection.language} /></TableCell>
                                     <TableCell className="text-right">
-                                        <ActionButton variant="outline" size="sm" label="Edit" href={`/dashboard/edit/${collection.slug}`}>
+                                        <ActionButton variant="outline" size="sm" label="Edit" href={ROUTES.DASHBOARD_EDIT(collection.slug)}>
                                             <Pencil size={14} />
                                         </ActionButton>
                                         <ActionButton label="Delete" variant="destructive" size="sm" onClick={() => setCollectionToDelete(collection.slug || null)}>
                                             <Trash size={14} />
                                         </ActionButton>
-                                        <ActionButton size="sm" label="Learn" href={`/learn/${collection.slug}`}>
+                                        <ActionButton size="sm" label="Learn" href={ROUTES.LEARN(collection.slug)}>
                                             <BookOpen size={14} />
                                         </ActionButton>
                                     </TableCell>

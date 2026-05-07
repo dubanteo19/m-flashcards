@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Languages } from "lucide-react";
 import { setCookie } from "cookies-next";
+import { ROUTES } from "../lib/constants";
 export default function LoginPage() {
     const [username, setUsername] = useState("");
     const router = useRouter();
@@ -20,7 +21,7 @@ export default function LoginPage() {
             path: '/',
             sameSite: 'lax'
         });
-        router.push('/dashboard');
+        router.push(ROUTES.DASHBOARD);
     };
 
     return (

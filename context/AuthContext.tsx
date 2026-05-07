@@ -1,5 +1,6 @@
 "use client";
 
+import { ROUTES } from "@/app/lib/constants";
 import { deleteCookie, getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { createContext, ReactNode, useContext, useState } from "react";
@@ -20,7 +21,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const logout = () => {
         deleteCookie("username");
         setUsername(null);
-        router.push("/login");
+        router.push(ROUTES.LONGIN);
         router.refresh();
     };
 
