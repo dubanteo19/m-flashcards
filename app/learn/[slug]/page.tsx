@@ -64,19 +64,19 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
 
     if (isLoading) return <Loader />
     if (!collection || cards.length === 0) return (
-        <div className="min-h-screen flex flex-col items-center justify-center">
+        <div className="min-h-screen flex-center flex-col ">
             <p className="mb-4">No cards found in this collection.</p>
             <LinkButton href={ROUTES.DASHBOARD}>Back to Library</LinkButton>
         </div>
     )
 
     return (
-        <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4 overflow-hidden">
+        <div className="min-h-screen bg-slate-50 flex-center flex-col  p-4 overflow-hidden">
             <div className="py-2">
                 <Flag size={120} language={collection.language} />
             </div>
             <div className="mb-8 ">
-                <h2 className="text-2xl font-bold text-center">{collection.title}</h2>
+                <h2 className="text-center">{collection.title}</h2>
                 <p className="text-muted-foreground text-sm max-w-md  mx-auto my-2 italic">
                     {collection.description}
                 </p>

@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/empty-state";
 import Loader from "@/components/loader";
 import { db } from "@/lib/db";
 import { useLiveQuery } from "dexie-react-hooks";
-import { Clock, Inbox } from "lucide-react";
+import { Clock } from "lucide-react";
 export default function HistoryPage() {
     return (
         <main className="container mx-auto py-10 px-4 max-w-6xl">
@@ -13,7 +13,7 @@ export default function HistoryPage() {
                     <Clock className="text-primary h-6 w-6" />
                 </div>
                 <div>
-                    <h1 className="text-3xl font-bold">Learning History</h1>
+                    <h2>Learning History</h2>
                     <p className="text-muted-foreground">Pick up where you left off</p>
                 </div>
             </header>

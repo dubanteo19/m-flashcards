@@ -21,7 +21,7 @@ export default function Flashcard({ card }: { card: FlashcardView }) {
                 {/* Front Side */}
                 <Card className="absolute inset-0 backface-hidden flex flex-col items-center justify-center p-6 shadow-xl">
                     <span className="text-sm text-muted-foreground mb-2">Front</span>
-                    <h2 className="text-5xl font-bold tracking-tighter">{card.word}</h2>
+                    <h2 className="text-5xl  tracking-tighter">{card.word}</h2>
                     <p className="mt-4 text-muted-foreground italic">Click to flip</p>
                 </Card>
 
@@ -31,7 +31,7 @@ export default function Flashcard({ card }: { card: FlashcardView }) {
                     style={{ transform: "rotateY(180deg)" }}
                 >
                     <span className="text-sm opacity-70 mb-2">Meaning</span>
-                    <h3 className="text-2xl font-semibold mb-1">{card.reading}</h3>
+                    <h3 className="mb-1">{card.reading}</h3>
                     <p className="text-3xl font-bold">{card.meaning}</p>
                 </Card>
             </motion.div>

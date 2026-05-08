@@ -28,7 +28,7 @@ export const ExploreListFacade = ({ collections, hasFilters }: ExploreListFacade
     }, [collections, favSlugs]);
     if (enrichedCollections.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center py-20 text-center">
+            <div className="flex flex-col items-center justify-center py-20 text-center ">
                 <p className="text-lg font-medium">
                     {hasFilters
                         ? "No results match your filters"
@@ -44,7 +44,7 @@ export const ExploreListFacade = ({ collections, hasFilters }: ExploreListFacade
         );
     }
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6  ">
             {enrichedCollections?.map((collection) => (
                 <motion.div
                     key={collection.id}

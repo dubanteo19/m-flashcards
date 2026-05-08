@@ -10,9 +10,9 @@ export default function NewCollectionPage() {
         <div className="container mx-auto py-10 max-w-3xl px-4">
             <BackButton />
             <div className="mb-8">
-                <h1 className="text-3xl font-bold">
+                <h2>
                     Create New Collection
-                </h1>
+                </h2>
                 <p className="text-muted-foreground text-lg">
                     Set up your new flashcard deck as <span className="font-semibold text-primary">{username}</span>
                 </p>

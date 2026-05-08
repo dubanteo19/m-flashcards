@@ -129,6 +129,34 @@
   html {
     @apply font-sans;
   }
+
+  h1 {
+    @apply text-4xl font-extrabold tracking-tight lg:text-5xl;
+  }
+
+  h2 {
+    @apply text-3xl font-semibold border-b pb-2 transition-colors first:mt-0;
+  }
+
+  h3 {
+    @apply text-2xl font-semibold tracking-tight;
+  }
+
+  h4 {
+    @apply text-xl font-semibold tracking-tight;
+  }
+
+  h5 {
+    @apply text-lg font-semibold;
+  }
+
+  /* Optional: Add default spacing for better readability */
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply scroll-m-20;
+  }
 }
 
 @layer utilities {

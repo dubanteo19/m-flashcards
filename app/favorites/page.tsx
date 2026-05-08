@@ -10,7 +10,7 @@ export default function FavoritesPage() {
         <main className="container mx-auto py-10 px-4 max-w-6xl">
             <header className="flex items-center gap-4 mb-10">
                 <div>
-                    <h1 className="text-3xl font-bold">Favorite Collections</h1>
+                    <h2>Favorite Collections</h2>
                     <p className="text-muted-foreground">Collections you've marked as favorites</p>
                 </div>
             </header>

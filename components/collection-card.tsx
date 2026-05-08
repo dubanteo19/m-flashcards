@@ -12,7 +12,6 @@ import { LinkButton } from "./ui/link-button";
 import { ROUTES } from "@/app/lib/constants";
 
 type CardVariant = "explore" | "history";
-
 interface CollectionCardProps {
     collection: Collection;
     variant?: CardVariant;
@@ -20,10 +19,10 @@ interface CollectionCardProps {
 }
 
 export const CollectionCard = ({ collection, variant = "explore", onToggleFavorite }: CollectionCardProps) => {
-    const isHistory = variant === "history";
+    const isHistory = variant === "history"
     const isFavorited = !!collection.isFavorited;
     const Metadata = (
-        <div className="flex items-center gap-4 text-muted-foreground">
+        <div className="flex items-center gap-4 text-muted-foreground ">
             <span className="flex items-center gap-1 font-medium">
                 <User size={14} className="text-primary" />
                 {collection.author_username}
@@ -34,7 +33,6 @@ export const CollectionCard = ({ collection, variant = "explore", onToggleFavori
             </span>
         </div>
     );
-
     const renderActions = () => {
         if (isHistory) {
             return (
@@ -71,9 +69,9 @@ export const CollectionCard = ({ collection, variant = "explore", onToggleFavori
     {/*main render*/ }
     return (
         <Card className={cn(
-            "group relative h-full border-2 transition-all flex flex-col cursor-pointer",
+            "group relative h-full border-2 transition-all flex flex-col cursor-pointer ",
             isHistory
-                ? "bg-slate-50/50 border-slate-200 shadow-none"
+                ? "bg-slate-50/50 border-slate-200 shadow-none "
                 : "bg-white border-transparent hover:border-primary shadow-sm"
         )}>
             <Link className="absolute inset-0 z-0" href={ROUTES.LEARN(collection.slug)} />
@@ -84,13 +82,13 @@ export const CollectionCard = ({ collection, variant = "explore", onToggleFavori
                 )}>
                     {collection.title}
                 </CardTitle>
-                <CardDescription className="line-clamp-2">
+                <CardDescription className="line-clamp-2 ">
                     {collection.description}
                 </CardDescription>
             </CardHeader>
 
             <CardFooter className={cn(
-                "flex justify-between items-center z-10 text-sm pt-4 border-t",
+                "flex justify-between items-center z-10 text-sm pt-4 border-t " ,
                 isHistory ? "bg-slate-100/30" : "bg-muted/20"
             )}>
                 {Metadata}

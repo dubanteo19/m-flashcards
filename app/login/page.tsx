@@ -11,12 +11,11 @@ import { ROUTES } from "../lib/constants";
 export default function LoginPage() {
     const [username, setUsername] = useState("");
     const router = useRouter();
-
-    const handleLogin = (e: SyntheticEvent<HTMLFormElement>) => {
+    const handleLogin = async (e: SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
         const trimmedName = username.trim();
         if (!trimmedName) return;
-        setCookie('username', trimmedName, {
+        await setCookie('username', trimmedName, {
             maxAge: 60 * 60 * 24 * 7, // 1 week
             path: '/',
             sameSite: 'lax'

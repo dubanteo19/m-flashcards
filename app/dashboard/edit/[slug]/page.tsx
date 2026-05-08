@@ -16,9 +16,9 @@ export default function EditCollectionPage({ params }: { params: Promise<{ slug:
         <div className="container mx-auto py-10 max-w-3xl px-4">
             <BackButton />
             <div className="mb-8">
-                <h1 className="text-3xl font-bold">
+                <h2 >
                     {slug ? "Edit Collection" : "Create New Collection"}
-                </h1>
+                </h2>
                 <p className="text-muted-foreground">
                     {slug ? `Updating Collection: ${decodeURIComponent(slug)}` : "Set up your new flashcard deck"}
                 </p>

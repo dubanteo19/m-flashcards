@@ -45,7 +45,7 @@ export default function Dashboard() {
         <div className="container mx-auto py-10 px-4">
             <div className="flex justify-between items-end mb-8">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">My Collections</h1>
+                    <h2>My Collections</h2>
                     <p className="text-muted-foreground text-lg">Logged in as {username}</p>
                 </div>
                 <div className="flex gap-3">
