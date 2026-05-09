@@ -20,6 +20,7 @@ export default function LoginPage() {
             path: '/',
             sameSite: 'lax'
         });
+        router.refresh();
         router.push(ROUTES.DASHBOARD);
     };
 
