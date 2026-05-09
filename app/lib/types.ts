@@ -35,7 +35,7 @@ export interface Collection extends CollectionBase {
     cards?: Card[];
 }
 export interface CollectionFilters {
-    language?: string;
+    language?: LanguageCode;
     author?: string;
     searchTerm?: string;
 }

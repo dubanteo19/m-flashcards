@@ -19,7 +19,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useAuth } from "@/context/AuthContext";
 import { useDeleteCollection, useUserCollections } from "@/hooks/useColleciton";
 import { BookOpen, Loader2, LogOut, Pencil, Plus, Trash } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 import { ROUTES } from "../lib/constants";
 export default function Dashboard() {
@@ -80,7 +79,11 @@ export default function Dashboard() {
                                         </Badge>
                                     </TableCell>
                                     <TableCell>{collection.cards_count} cards</TableCell>
-                                    <TableCell><Flag language={collection.language} /></TableCell>
+                                    <TableCell>
+                                        <div>
+                                            <Flag language={collection.language} />
+                                        </div>
+                                    </TableCell>
                                     <TableCell className="text-right">
                                         <ActionButton variant="outline" size="sm" label="Edit" href={ROUTES.DASHBOARD_EDIT(collection.slug)}>
                                             <Pencil size={14} />

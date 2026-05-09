@@ -11,6 +11,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import PromptTemplate from "./prompt-tempate";
 import { useSaveCollection } from "@/hooks/useColleciton";
+import { LanguageSelector } from "./filter/language-selector";
+import { LanguageCode } from "@/app/lib/enums";
 
 interface CollectionFormProps {
     initialData?: Collection;
@@ -18,7 +20,9 @@ interface CollectionFormProps {
 export default function CollectionForm({ initialData }: CollectionFormProps) {
     const { username } = useAuth();
     const [title, setTitle] = useState(initialData?.title || "");
+    const [topic, setTopic] = useState("");
     const [desc, setDesc] = useState(initialData?.description || "");
+    const [language, setLanguage] = useState(initialData?.language || LanguageCode.English);
     const [jsonInput, setJsonInput] = useState(
         initialData?.cards ? JSON.stringify(initialData.cards, null, 2) : ""
     );
@@ -36,6 +40,7 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
                     id: initialData?.id,
                     slug: initialData?.slug,
                     title,
+                    language,
                     description: desc,
                     is_published: true,
                     cards
@@ -58,17 +63,28 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
     return (
         <div className="space-y-6">
             <div className="grid gap-4">
+                <div className="space-y-2">
+                    <label className="text-sm font-medium">Language</label>
+                    <LanguageSelector
+                        selected={language}
+                        onSelect={setLanguage}
+                        showAll={false}
+                    />
+                </div>
                 <Input
                     placeholder="Collection Title"
+                    maxLength={200}
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     className="text-lg font-bold"
                 />
                 <Textarea
                     placeholder="Description (Optional)"
+                    maxLength={400}
                     value={desc}
                     onChange={(e) => setDesc(e.target.value)}
                 />
+
             </div>
 
             <Tabs defaultValue="ai">
@@ -78,7 +94,12 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
                 </TabsList>
 
                 <TabsContent value="ai" className="space-y-4">
-                    <PromptTemplate />
+                    <Input
+                        placeholder="Topic for AI-generated words (e.g. Food, Travel, Business)"
+                        value={topic}
+                        onChange={(e) => setTopic(e.target.value)}
+                    />
+                    <PromptTemplate lang={language} topic={topic} />
                     <div className="text-xs bg-muted p-3 rounded-md flex items-start gap-2">
                         <AlertCircle size={14} className="mt-0.5" />
                         <span>Paste the JSON array here. Ensure keys are &quot;word&quot;, &quot;reading&quot;, and &quot;meaning&quot;.</span>

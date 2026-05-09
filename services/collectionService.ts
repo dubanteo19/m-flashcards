@@ -43,6 +43,7 @@ export const collectionService = {
         data: {
             id?: string;
             slug?: string;
+            language: string;
             title: string;
             description: string;
             is_published: boolean;
@@ -59,6 +60,7 @@ export const collectionService = {
             .upsert({
                 slug: slug, // Human-friendly Japanese/Text slug
                 title: data.title,
+                language: data.language,
                 description: data.description,
                 author_username: username,
                 is_published: data.is_published,

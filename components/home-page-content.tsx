@@ -8,12 +8,13 @@ import { Button } from "@/components/ui/button";
 import Loader from "@/components/loader";
 import { CollectionFilters } from "@/app/lib/types";
 import { ExploreListFacade } from "./explore-list-facade";
+import { LanguageCode } from "@/app/lib/enums";
 
 export default function HomePageContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const filters: CollectionFilters = {
-        language: searchParams.get("language") || undefined,
+        language: searchParams.get("language") as LanguageCode || undefined,
         author: searchParams.get("author") || undefined,
     };
 

@@ -1,7 +1,7 @@
 "use client";
 
-import { LanguageFilter } from "@/components/filter/language-filter";
 import { CollectionFilters } from "@/app/lib/types";
+import { LanguageSelector } from "./language-selector";
 
 interface Props {
     filters: CollectionFilters;
@@ -11,7 +11,7 @@ interface Props {
 export function FilterBar({ filters, onChange }: Props) {
     return (
         <div className="flex flex-wrap items-center gap-4">
-            <LanguageFilter
+            <LanguageSelector
                 selected={filters.language}
                 onSelect={(val) =>
                     onChange({
