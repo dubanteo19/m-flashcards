@@ -1,5 +1,6 @@
 "use client";
 
+import { ROUTES } from "@/app/lib/constants";
 import { Flag } from "@/components/flag-icon";
 import Loader from "@/components/loader";
 import { ActionButton } from "@/components/ui/action-button";
@@ -20,7 +21,6 @@ import { useAuth } from "@/context/AuthContext";
 import { useDeleteCollection, useUserCollections } from "@/hooks/useColleciton";
 import { BookOpen, Loader2, LogOut, Pencil, Plus, Trash } from "lucide-react";
 import { useState } from "react";
-import { ROUTES } from "../lib/constants";
 export default function Dashboard() {
     const { username, logout } = useAuth();
     const { data: collections = [], isLoading } = useUserCollections(username ?? "");

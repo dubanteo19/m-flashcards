@@ -1,28 +1,44 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import createMiddleware from "next-intl/middleware";
+import { NextRequest, NextResponse } from "next/server";
 
-export function proxy(request: NextRequest) {
-    const username = request.cookies.get('username')?.value;
-    console.log((username))
-    const { pathname } = request.nextUrl;
+const intlMiddleware = createMiddleware({
+    locales: ["en", "vi"],
+    defaultLocale: "vi"
+});
 
-    // 1. Protect Dashboard: Redirect to login if cookie is missing
-    if (pathname.startsWith('/dashboard') && !username) {
-        return NextResponse.redirect(new URL('/login', request.url));
+export default function proxy(request: NextRequest) {
+    const response = intlMiddleware(request);
+
+    const username = request.cookies.get("username")?.value;
+
+    const pathname = request.nextUrl.pathname;
+
+    const pathnameWithoutLocale = pathname.replace(
+        /^\/(en|vi)/,
+        ""
+    );
+
+    if (
+        pathnameWithoutLocale.startsWith("/dashboard") &&
+        !username
+    ) {
+        return NextResponse.redirect(
+            new URL("/en/login", request.url)
+        );
     }
 
-    // 2. Prevent double login: Redirect to dashboard if already logged in
-    if (pathname === '/login' && username) {
-        return NextResponse.redirect(new URL('/dashboard', request.url));
+    if (
+        pathnameWithoutLocale === "/login" &&
+        username
+    ) {
+        return NextResponse.redirect(
+            new URL("/en/dashboard", request.url)
+        );
     }
 
-    return NextResponse.next();
+    return response;
 }
 
-// Specify which routes the proxy should run on
 export const config = {
-    matcher: [
-        '/dashboard/:path*', // Matches /dashboard/anything
-        '/login'
-    ],
+    matcher: ["/((?!api|_next|.*\\..*).*)"]
 };

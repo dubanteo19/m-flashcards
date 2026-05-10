@@ -5,13 +5,15 @@ import Loader from "@/components/loader";
 import { db } from "@/lib/db";
 import { favoritesService } from "@/services/favoriteService";
 import { useLiveQuery } from "dexie-react-hooks";
+import { useTranslations } from "next-intl";
 export default function FavoritesPage() {
+    const t = useTranslations("favorites");
     return (
         <main className="container mx-auto py-10 px-4 max-w-6xl">
             <header className="flex items-center gap-4 mb-10">
                 <div>
-                    <h2>Favorite Collections</h2>
-                    <p className="text-muted-foreground">Collections you've marked as favorites</p>
+                    <h2>{t("title")}</h2>
+                    <p className="text-muted-foreground">{t("subtitle")}</p>
                 </div>
             </header>
             <FavoritesListFacade />
@@ -21,6 +23,7 @@ export default function FavoritesPage() {
 
 
 function FavoritesListFacade() {
+    const t = useTranslations("favorites");
     const favorites = useLiveQuery(() =>
         db.favorites.toArray()
     );
@@ -34,8 +37,8 @@ function FavoritesListFacade() {
     if (favorites.length === 0) {
         return (
             <EmptyState
-                title="No favorite collections yet."
-                description="Collections you mark as favorites will appear here."
+                title={t("empty.noFavorites")}
+                description={t("empty.addFavorites")}
             />
         );
     }

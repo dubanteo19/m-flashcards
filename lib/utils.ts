@@ -30,21 +30,38 @@ export const shuffleArray = <T>(array: T[]) => {
   return newArr;
 };
 
-export function formatDate(date: number | Date | undefined) {
+export function formatDate(
+  date: number | Date | undefined,
+  locale: string = "vi"
+) {
   const now = new Date();
   const then = date ? new Date(date) : now;
-  const diffInSeconds = Math.floor((now.getTime() - then.getTime()) / 1000);
 
-  if (diffInSeconds < 60) return "Just now";
+  const diffInSeconds = Math.floor(
+    (then.getTime() - now.getTime()) / 1000
+  );
+
+  const rtf = new Intl.RelativeTimeFormat(locale, {
+    numeric: "auto",
+  });
+
+  if (Math.abs(diffInSeconds) < 60) {
+    return rtf.format(diffInSeconds, "second");
+  }
 
   const diffInMinutes = Math.floor(diffInSeconds / 60);
-  if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+
+  if (Math.abs(diffInMinutes) < 60) {
+    return rtf.format(diffInMinutes, "minute");
+  }
 
   const diffInHours = Math.floor(diffInMinutes / 60);
-  if (diffInHours < 24) return `${diffInHours}h ago`;
+
+  if (Math.abs(diffInHours) < 24) {
+    return rtf.format(diffInHours, "hour");
+  }
 
   const diffInDays = Math.floor(diffInHours / 24);
-  if (diffInDays < 7) return `${diffInDays}d ago`;
 
-  return then.toLocaleDateString();
+  return rtf.format(diffInDays, "day");
 }

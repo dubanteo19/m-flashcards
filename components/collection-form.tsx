@@ -80,7 +80,7 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
                 />
                 <Textarea
                     placeholder="Description (Optional)"
-                    maxLength={400}
+                    maxLength={150}
                     value={desc}
                     onChange={(e) => setDesc(e.target.value)}
                 />

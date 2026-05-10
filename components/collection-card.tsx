@@ -10,6 +10,7 @@ import { ActionButton } from "./ui/action-button";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { LinkButton } from "./ui/link-button";
 import { ROUTES } from "@/app/lib/constants";
+import { useLocale, useTranslations } from "next-intl";
 
 type CardVariant = "explore" | "history";
 interface CollectionCardProps {
@@ -20,6 +21,8 @@ interface CollectionCardProps {
 
 export const CollectionCard = ({ collection, variant = "explore", onToggleFavorite }: CollectionCardProps) => {
     const isHistory = variant === "history"
+    const t = useTranslations("common");
+    const locale = useLocale();
     const isFavorited = !!collection.isFavorited;
     const Metadata = (
         <div className="flex items-center gap-4 text-muted-foreground ">
@@ -38,7 +41,7 @@ export const CollectionCard = ({ collection, variant = "explore", onToggleFavori
             return (
                 <div className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
                     <Clock className="w-3.5 h-3.5" />
-                    <span>{formatDate(collection.lastViewed)}</span>
+                    <span>{formatDate(collection.lastViewed,locale)}</span>
                 </div>
             );
         }
@@ -62,7 +65,7 @@ export const CollectionCard = ({ collection, variant = "explore", onToggleFavori
                         <HeartIcon size={20} className={cn(isFavorited && "fill-current")} />
                     </motion.div>
                 </ActionButton>
-                <LinkButton href={ROUTES.LEARN(collection.slug)}>Learn</LinkButton>
+                <LinkButton href={ROUTES.LEARN(collection.slug)}>{t("learn")}</LinkButton>
             </div>
         );
     };
@@ -88,7 +91,7 @@ export const CollectionCard = ({ collection, variant = "explore", onToggleFavori
             </CardHeader>
 
             <CardFooter className={cn(
-                "flex justify-between items-center z-10 text-sm pt-4 border-t " ,
+                "flex justify-between items-center z-10 text-sm pt-4 border-t ",
                 isHistory ? "bg-slate-100/30" : "bg-muted/20"
             )}>
                 {Metadata}

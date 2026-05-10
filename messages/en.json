@@ -1,0 +1,48 @@
+{
+    "common": {
+        "refresh": "Refresh",
+        "loading": "Loading",
+        "learn": "Learn"
+    },
+    "header": {
+        "subtitle": "Small app to help you learn vocabulary",
+        "history": "History",
+        "favorites": "Favorites",
+        "contribute": "Contribute"
+    },
+    "learn": {
+        "previous": "Previous",
+        "next": "Next",
+        "cardProgress": "Card {current} of {total}",
+        "shuffle": "Shuffle",
+        "card": {
+            "clickToFlip": "Click to flip",
+            "front": "Front",
+            "meaning": "Meaning"
+        }
+    },
+    "favorites": {
+        "title": "Favorites",
+        "subtitle": "Cards you've marked as favorites will appear here",
+        "empty": {
+            "noFavorites": "No favorite cards yet",
+            "addFavorites": "Add some cards to your favorites to see them here"
+        }
+    },
+    "history": {
+        "title": "History",
+        "subtitle": "Your recently studied cards will appear here",
+        "empty": {
+            "noHistory": "No study history yet",
+            "startLearning": "Start learning some cards to see your history here"
+        }
+    },
+    "explore": {
+        "empty": {
+            "noCollections": "No collections yet",
+            "noResults": "No results match your filters",
+            "adjustFilters": "Try adjusting or clearing your filters",
+            "comeBackLater": "Come back later or refresh to fetch new data"
+        }
+    }
+}

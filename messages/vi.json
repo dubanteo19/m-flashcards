@@ -1,0 +1,50 @@
+{
+    "common": {
+        "refresh": "Làm mới",
+        "loading": "Đang tải",
+        "learn": "Học"
+    },
+    "header": {
+        "subtitle": "Ứng dụng nhỏ giúp bạn học từ vựng",
+        "history": "Lịch sử",
+        "favorites": "Yêu thích",
+        "contribute": "Đóng góp"
+    },
+    "learn": {
+        "previous": "Trước đó",
+        "next": "Tiếp theo",
+        "cardProgress": "Thẻ {current} / {total}",
+        "shuffle": "Trộn",
+        "card": {
+            "clickToFlip": "Nhấp để lật thẻ",
+            "front": "Mặt trước",
+            "meaning": "Nghĩa"
+        }
+    },
+    "favorites": {
+        "title": "Yêu thích",
+        "subtitle": "Các thẻ bạn đã đánh dấu là yêu thích sẽ xuất hiện ở đây",
+        "empty": {
+            "noFavorites": "Chưa có mục yêu thích nào",
+            "addFavorites": "Hãy thêm một số thẻ vào mục yêu thích của bạn để xem chúng ở đây"
+        }
+    },
+    "history": {
+        "title": "Lịch sử",
+        "subtitle": "Các thẻ bạn đã học gần đây sẽ xuất hiện ở đây",
+        "empty": {
+            "noHistory": "Chưa có lịch sử học nào",
+            "startLearning": "Hãy bắt đầu học một số thẻ để xem lịch sử của bạn ở đây"
+        }
+    },
+    "explore": {
+        "explore": {
+            "empty": {
+                "noCollections": "Chưa có bộ sưu tập nào",
+                "noResults": "Không tìm thấy kết quả phù hợp với bộ lọc",
+                "adjustFilters": "Hãy thử điều chỉnh hoặc xóa bộ lọc của bạn",
+                "comeBackLater": "Hãy quay lại sau hoặc làm mới để cập nhật dữ liệu mới"
+            }
+        }
+    }
+}

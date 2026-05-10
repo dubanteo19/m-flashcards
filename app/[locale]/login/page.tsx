@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Languages } from "lucide-react";
 import { setCookie } from "cookies-next";
-import { ROUTES } from "../lib/constants";
+import { ROUTES } from "@/app/lib/constants";
 export default function LoginPage() {
     const [username, setUsername] = useState("");
     const router = useRouter();

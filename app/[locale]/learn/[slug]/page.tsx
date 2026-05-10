@@ -13,10 +13,12 @@ import { cn, shuffleArray } from "@/lib/utils";
 import { historyService } from "@/services/historyService";
 import { AnimatePresence, motion, PanInfo } from "framer-motion";
 import { ChevronLeft, ChevronRight, Shuffle } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { use, useCallback, useEffect, useState } from "react";
 
 export default function LearnPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = use(params);
+    const t = useTranslations("learn");
     const { data: collection, isLoading } = useCollectionBySlug(slug);
     const [isDragging, setIsDragging] = useState(false);
     const [shuffledCards, setShuffledCards] = useState<Card[] | null>(null);
@@ -71,28 +73,28 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
     )
 
     return (
-        <div className="min-h-screen bg-slate-50 flex-center flex-col  p-4 overflow-hidden">
-            <div className="py-2">
-                <Flag size={120} language={collection.language} />
-            </div>
-            <div className="mb-8 ">
+        <div className="min-h-screen bg-slate-50 flex items-center flex-col  p-4 overflow-hidden">
+            <Flag
+                size="md"
+                className="py-2"
+                language={collection.language} />
+            <div className="mb-2">
                 <h2 className="text-center">{collection.title}</h2>
                 <p className="text-muted-foreground text-sm max-w-md  mx-auto my-2 italic">
                     {collection.description}
                 </p>
 
                 <p className="text-primary font-medium text-center">
-                    Card {currentIndex + 1} of {cards.length}
+                    {t("cardProgress", { current: currentIndex + 1, total: cards.length })}
                 </p>
 
             </div>
-
-            <div className="relative w-full max-w-md h-64 flex justify-center items-center">
+<div className="relative shadow  w-full max-w-md lg:h-64  flex-center">
                 <AnimatePresence initial={false} custom={direction} mode="popLayout">
                     <motion.div
                         key={page}
                         custom={direction}
-                        variants={variants} // Your existing variants
+                        variants={variants}
                         initial="enter"
                         animate="center"
                         exit="exit"
@@ -113,18 +115,18 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
                 </AnimatePresence>
             </div>
 
-            <div className="flex gap-4 mt-10">
+            <div className="flex gap-4 mt-4 items-baseline">
                 <Button variant="outline" size="lg" onClick={() => paginate(-1)}>
-                    <ChevronLeft className="mr-2 h-4 w-4" /> Previous
+                    <ChevronLeft className="mr-2 size-4" /> {t("previous")}
                 </Button>
+                <ActionButton label={t("shuffle")} size="sm" variant="destructive" className="mt-4" onClick={handleShuffle}>
+                    <Shuffle className="size-4" />
+                </ActionButton>
                 <Button size="lg" onClick={() => paginate(1)}>
-                    Next <ChevronRight className="ml-2 h-4 w-4" />
+                    {t("next")} <ChevronRight className="ml-2 size-4" />
                 </Button>
 
             </div>
-            <ActionButton label="Shuffle" size="sm" variant="destructive" className="mt-4" onClick={handleShuffle}>
-                <Shuffle className="size-4" />
-            </ActionButton>
         </div >
     );
 }

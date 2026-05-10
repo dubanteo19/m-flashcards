@@ -1,18 +1,20 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
+import { LanguageCode } from "@/app/lib/enums";
+import { CollectionFilters } from "@/app/lib/types";
+import { FilterBar } from "@/components/filter/filter-bar";
+import Loader from "@/components/loader";
+import { Button } from "@/components/ui/button";
 import { useCollections } from "@/hooks/useColleciton";
 import { useCooldown } from "@/hooks/useCooldown";
-import { FilterBar } from "@/components/filter/filter-bar";
-import { Button } from "@/components/ui/button";
-import Loader from "@/components/loader";
-import { CollectionFilters } from "@/app/lib/types";
+import { useTranslations } from "next-intl";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ExploreListFacade } from "./explore-list-facade";
-import { LanguageCode } from "@/app/lib/enums";
 
 export default function HomePageContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
+    const t = useTranslations("common");
     const filters: CollectionFilters = {
         language: searchParams.get("language") as LanguageCode || undefined,
         author: searchParams.get("author") || undefined,
@@ -46,7 +48,7 @@ export default function HomePageContent() {
                     disabled={isFetching || cooldown}
                     onClick={handleRefresh}
                 >
-                    {isFetching ? "..." : "Refresh"}
+                    {isFetching ? "..." : t("refresh")}
                 </Button>
             </div>
             <ExploreListFacade

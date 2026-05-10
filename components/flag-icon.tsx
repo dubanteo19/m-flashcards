@@ -1,11 +1,12 @@
 import { LanguageCode } from '@/app/lib/enums';
+import { cn } from '@/lib/utils';
 import React from 'react';
 
-export const FlagEn = ({ size = 24 }: { size?: number }) => (
+export const FlagEn = ({ className }: { className?: string }) => (
     <svg
-        width={size}
-        height={(size * 38.4) / 55.2}
         viewBox="0 0 55.2 38.4"
+        className={cn("h-auto", className)}
+        preserveAspectRatio="xMidYMid meet"
         xmlns="http://www.w3.org/2000/svg"
     >
         <path
@@ -35,10 +36,11 @@ export const FlagEn = ({ size = 24 }: { size?: number }) => (
     </svg>
 );
 
-export const FlagZh = ({ size = 24 }: { size?: number }) => (
+export const FlagZh = ({ className }: { className?: string }) => (
     <svg
-        width={size}
-        height={(size * 38.4) / 55.2}
+
+        className={cn("h-auto", className)}
+        preserveAspectRatio="xMidYMid meet"
         viewBox="0 0 55.2 38.4"
         xmlns="http://www.w3.org/2000/svg"
     >
@@ -70,10 +72,10 @@ export const FlagZh = ({ size = 24 }: { size?: number }) => (
     </svg>
 );
 
-export const FlagJa = ({ size = 24 }: { size?: number }) => (
+export const FlagJa = ({ className }: { className?: string }) => (
     <svg
-        width={size}
-        height={(size * 38.9) / 55.7}
+        className={cn("h-auto", className)}
+        preserveAspectRatio="xMidYMid meet"
         viewBox="0 0 55.7 38.9"
         xmlns="http://www.w3.org/2000/svg"
     >
@@ -93,10 +95,10 @@ export const FlagJa = ({ size = 24 }: { size?: number }) => (
     </svg>
 );
 
-export const FlagKo = ({ size = 24 }: { size?: number }) => (
+export const FlagKo = ({ className }: { className?: string }) => (
     <svg
-        width={size}
-        height={(size * 38.9) / 55.7}
+        className={cn("h-auto", className)}
+        preserveAspectRatio="xMidYMid meet"
         viewBox="0 0 55.7 38.9"
         xmlns="http://www.w3.org/2000/svg"
     >
@@ -147,7 +149,7 @@ export const FlagKo = ({ size = 24 }: { size?: number }) => (
 );
 
 
-type FlagComponent = React.ComponentType<{ size?: number }>;
+type FlagComponent = React.ComponentType<{ className?: string }>;
 
 export const LanguageFlags: Record<LanguageCode, FlagComponent> = {
     en: FlagEn,
@@ -158,15 +160,33 @@ export const LanguageFlags: Record<LanguageCode, FlagComponent> = {
 
 
 interface FlagProps {
-    size?: number;
     language: LanguageCode;
+    className?: string;
+    size?: "sm" | "md" | "lg";
 }
 
-export const Flag = ({ language, size = 24 }: FlagProps) => {
+const sizeClasses = {
+    sm: "w-6",
+    md: "w-16 md:w-24",
+    lg: "w-20 md:w-28 lg:w-[120px]"
+};
+
+export const Flag = ({
+    language,
+    className,
+    size = "sm"
+}: FlagProps) => {
     const Component = LanguageFlags[language];
+
     return (
-        <div className='shadow'>
-            <Component size={size} />
+        <div
+            className={cn(
+                "shadow h-auto",
+                sizeClasses[size],
+                className
+            )}
+        >
+            <Component />
         </div>
-    )
+    );
 };

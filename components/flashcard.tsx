@@ -1,10 +1,12 @@
 "use client";
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Card } from "@/components/ui/card";
 import { FlashcardView } from "@/app/lib/types";
+import { Card } from "@/components/ui/card";
+import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 export default function Flashcard({ card }: { card: FlashcardView }) {
+    const t = useTranslations("learn.card");
     const [isFlipped, setIsFlipped] = useState(false);
 
     return (
@@ -20,9 +22,9 @@ export default function Flashcard({ card }: { card: FlashcardView }) {
             >
                 {/* Front Side */}
                 <Card className="absolute inset-0 backface-hidden flex flex-col items-center justify-center p-6 shadow-xl">
-                    <span className="text-sm text-muted-foreground mb-2">Front</span>
+                    <span className="text-sm text-muted-foreground mb-2">{t("front")}</span>
                     <h2 className="text-5xl  tracking-tighter">{card.word}</h2>
-                    <p className="mt-4 text-muted-foreground italic">Click to flip</p>
+                    <p className="mt-4 text-muted-foreground italic">{t("clickToFlip")}</p>
                 </Card>
 
                 {/* Back Side */}
@@ -30,7 +32,7 @@ export default function Flashcard({ card }: { card: FlashcardView }) {
                     className="absolute inset-0 backface-hidden flex flex-col items-center justify-center p-6 shadow-xl bg-primary text-primary-foreground"
                     style={{ transform: "rotateY(180deg)" }}
                 >
-                    <span className="text-sm opacity-70 mb-2">Meaning</span>
+                    <span className="text-sm opacity-70 mb-2">{t("meaning")}</span>
                     <h3 className="mb-1">{card.reading}</h3>
                     <p className="text-3xl font-bold">{card.meaning}</p>
                 </Card>

@@ -6,12 +6,14 @@ import { db } from "@/lib/db";
 import { favoritesService } from "@/services/favoriteService";
 import { useLiveQuery } from "dexie-react-hooks";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 interface ExploreListFacadeProps {
     collections: Collection[];
     hasFilters: boolean;
 }
 export const ExploreListFacade = ({ collections, hasFilters }: ExploreListFacadeProps) => {
+    const t = useTranslations("explore.empty");
     const favSlugs = useLiveQuery(
         async () => {
             const favs = await db.favorites.toArray();
@@ -31,14 +33,14 @@ export const ExploreListFacade = ({ collections, hasFilters }: ExploreListFacade
             <div className="flex flex-col items-center justify-center py-20 text-center ">
                 <p className="text-lg font-medium">
                     {hasFilters
-                        ? "No results match your filters"
-                        : "No collections yet"}
+                        ? t("noResults")
+                        : t("noCollections")}
                 </p>
 
                 <p className="text-sm text-muted-foreground mt-2">
                     {hasFilters
-                        ? "Try adjusting or clearing your filters"
-                        : "Come back later or refresh to fetch new data"}
+                        ? t("adjustFilters")
+                        : t("comeBackLater")}
                 </p>
             </div>
         );

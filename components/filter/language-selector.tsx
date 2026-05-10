@@ -7,7 +7,7 @@ import { Flag } from "@/components/flag-icon";
 interface LanguageSelectorProps {
     selected?: LanguageCode;
     onSelect: (value: LanguageCode) => void;
-    showAll?: boolean; // New prop to toggle "All" button
+    showAll?: boolean;
 }
 
 export function LanguageSelector({ selected, onSelect, showAll = true }: LanguageSelectorProps) {
@@ -18,7 +18,7 @@ export function LanguageSelector({ selected, onSelect, showAll = true }: Languag
             {/* Optional "All" Button */}
             {showAll && (
                 <button
-                    type="button" // Prevent form submission
+                    type="button"
                     onClick={() => onSelect(LanguageCode.English)}
                     className={cn(
                         "p-1 rounded-md border-2 transition-all hover:scale-110",
@@ -49,7 +49,7 @@ export function LanguageSelector({ selected, onSelect, showAll = true }: Languag
                                 : "border-transparent opacity-50 hover:opacity-100"
                         )}
                     >
-                        <Flag language={lang} size={24} />
+                        <Flag language={lang} />
                     </button>
                 );
             })}

@@ -5,7 +5,9 @@ import Loader from "@/components/loader";
 import { db } from "@/lib/db";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Clock } from "lucide-react";
+import { useTranslations } from "next-intl";
 export default function HistoryPage() {
+    const t = useTranslations("history");   
     return (
         <main className="container mx-auto py-10 px-4 max-w-6xl">
             <header className="flex items-center gap-4 mb-10">
@@ -13,8 +15,8 @@ export default function HistoryPage() {
                     <Clock className="text-primary h-6 w-6" />
                 </div>
                 <div>
-                    <h2>Learning History</h2>
-                    <p className="text-muted-foreground">Pick up where you left off</p>
+                    <h2>{t("title")}</h2>
+                    <p className="text-muted-foreground">{t("subtitle")}</p>
                 </div>
             </header>
 
@@ -25,6 +27,7 @@ export default function HistoryPage() {
 
 
 function HistoryListFacade() {
+    const t = useTranslations("history");
     const history = useLiveQuery(() =>
         db.history.orderBy('lastViewed').reverse().toArray()
     );
@@ -38,8 +41,8 @@ function HistoryListFacade() {
     if (history.length === 0) {
         return (
             <EmptyState
-                title="No history yet."
-                description="Collections you study will appear here."
+                title={t("empty.noHistory")}
+                description={t("empty.startLearning")}
             />
         );
     }
