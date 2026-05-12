@@ -8,13 +8,14 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { AppLanguageSelector } from "../app-language-selector";
 import { ActionButton } from "../ui/action-button";
+import { LinkButton } from "../ui/link-button";
 
 export default function Header() {
     const { favoritesCount } = useStats();
     const t = useTranslations("header");
 
     return (
-        <header className="container mx-auto py-4 px-4 flex  gap-4 items-center justify-between sticky  top-0 bg-background z-50">
+        <header className="container mx-auto pt-4 px-4 flex  gap-4 items-center justify-between sticky  top-0 bg-background z-50">
             <div>
                 <Link href={ROUTES.HOME} className="text-primary ">
                     <h1 className="font-bold text-xl">M Flashcard</h1>
@@ -23,6 +24,9 @@ export default function Header() {
             </div>
 
             <div className="flex justify-between items-center gap-2 md:gap-4">
+                <LinkButton variant="outline" href={ROUTES.HISTORY}>
+                    {t("contribute")}
+                </LinkButton>
                 {/* History Action */}
                 <ActionButton label={t("history")} variant="secondary" size="icon" href={ROUTES.HISTORY}>
                     <HistoryIcon className="size-5" />

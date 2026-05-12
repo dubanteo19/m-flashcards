@@ -27,7 +27,6 @@ export default function Dashboard() {
     const { data: collections = [], isLoading } = useUserCollections(username ?? "");
     const [collectionToDelete, setCollectionToDelete] = useState<string | null>(null);
     const { mutate: deleteCollection, isPending: isDeleting } = useDeleteCollection();
-    // Confirm 
     const confirmDelete = async () => {
         if (!collectionToDelete) return
         try {
