@@ -9,7 +9,7 @@ import { useTranslations } from "next-intl";
 export default function HistoryPage() {
     const t = useTranslations("history");   
     return (
-        <main className="container mx-auto py-10 px-4 max-w-6xl">
+        <main className="container mx-auto py-2 px-4 max-w-6xl">
             <header className="flex items-center gap-4 mb-10">
                 <div className="p-3 bg-primary/10 rounded-xl">
                     <Clock className="text-primary h-6 w-6" />

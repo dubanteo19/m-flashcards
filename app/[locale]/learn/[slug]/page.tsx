@@ -73,10 +73,9 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
     )
 
     return (
-        <div className="min-h-screen bg-slate-50 flex items-center flex-col  p-4 overflow-hidden">
+        <div className="flex-1 bg-slate-50 flex justify-center items-center flex-col  p-4 overflow-hidden">
             <Flag
                 size="md"
-                className="py-2"
                 language={collection.language} />
             <div className="mb-2">
                 <h2 className="text-center">{collection.title}</h2>
@@ -89,7 +88,7 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
                 </p>
 
             </div>
-<div className="relative shadow  w-full max-w-md lg:h-64  flex-center">
+            <div className="relative shadow  w-full max-w-md lg:h-64  flex-center">
                 <AnimatePresence initial={false} custom={direction} mode="popLayout">
                     <motion.div
                         key={page}

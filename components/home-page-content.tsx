@@ -1,15 +1,14 @@
 "use client";
 
+import { LanguageCode } from "@/app/lib/enums";
 import { CollectionFilters } from "@/app/lib/types";
 import { FilterBar } from "@/components/filter/filter-bar";
-import Loader from "@/components/loader";
+import FullPageLoader from "@/components/loader";
 import { useCollections } from "@/hooks/useColleciton";
+import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CooldownButton } from "./buttons/cooldown-button";
 import { ExploreListFacade } from "./explore-list-facade";
-import FullPageLoader from "@/components/loader";
-import { useTranslations } from "next-intl";
-import { LanguageCode } from "@/app/lib/enums";
 
 export default function HomePageContent() {
     const router = useRouter();
@@ -35,12 +34,12 @@ export default function HomePageContent() {
     const hasFilters = Object.values(filters).some(Boolean);
     return (
         <div className="space-y-4 ">
-            <div className="flex items-end justify-between gap-4">
+            <div className="flex items-center justify-between gap-4">
                 <FilterBar filters={filters} onChange={updateFilter} />
                 <CooldownButton
                     isFetching={isFetching}
                     callback={refetch}
-                    text="Refresh"
+                    text={t("refresh")}
                 />
             </div>
             <ExploreListFacade

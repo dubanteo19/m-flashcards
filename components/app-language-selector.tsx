@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 
-import { FlagEn, FlagVi } from "./flag-icon";
+import { FlagUs, FlagVi } from "./flag-icon";
 import {
     Select,
     SelectContent,
@@ -29,17 +29,17 @@ export const AppLanguageSelector = () => {
             value={locale}
             onValueChange={changeLanguage}
         >
-            <SelectTrigger >
+            <SelectTrigger className="w-[70px] flex justify-center p-0" >
                 <SelectValue />
             </SelectTrigger>
 
-            <SelectContent>
+            <SelectContent className="min-w-[70px] ">
                 <SelectGroup>
                     <SelectItem value="en">
-                        <FlagEn />
+                        <FlagUs className="w-16"  />
                     </SelectItem>
                     <SelectItem value="vi">
-                        <FlagVi />
+                        <FlagVi className="w-16" />
                     </SelectItem>
                 </SelectGroup>
             </SelectContent>

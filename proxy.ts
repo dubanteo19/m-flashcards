@@ -3,16 +3,15 @@ import { NextRequest, NextResponse } from "next/server";
 
 const intlMiddleware = createMiddleware({
     locales: ["en", "vi"],
-    defaultLocale: "vi"
+    defaultLocale: "vi",
+    localeDetection: false
 });
 
 export default function proxy(request: NextRequest) {
     const response = intlMiddleware(request);
-
     const username = request.cookies.get("username")?.value;
-
     const pathname = request.nextUrl.pathname;
-
+    const locale = pathname.split("/")[1] || "vi";
     const pathnameWithoutLocale = pathname.replace(
         /^\/(en|vi)/,
         ""
@@ -23,7 +22,7 @@ export default function proxy(request: NextRequest) {
         !username
     ) {
         return NextResponse.redirect(
-            new URL("/en/login", request.url)
+            new URL(`/${locale}/login`, request.url)
         );
     }
 
@@ -32,7 +31,7 @@ export default function proxy(request: NextRequest) {
         username
     ) {
         return NextResponse.redirect(
-            new URL("/en/dashboard", request.url)
+            new URL(`/${locale}/dashboard`, request.url)
         );
     }
 

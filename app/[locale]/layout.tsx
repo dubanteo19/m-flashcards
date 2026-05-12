@@ -73,7 +73,7 @@ export default async function RootLayout({
         <Providers>
           <NextIntlClientProvider messages={messages} locale={locale}  >
             <Header />
-            <main className="flex-1">
+            <main className="flex-1 flex flex-col">
               {children}
             </main>
             <Footer />

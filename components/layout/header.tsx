@@ -22,7 +22,7 @@ export default function Header() {
                 <p className="hidden md:block text-sm text-muted-foreground">{t("subtitle")}</p>
             </div>
 
-            <div className="flex justify-between items-center gap-1 md:gap-4">
+            <div className="flex justify-between items-center gap-2 md:gap-4">
                 {/* History Action */}
                 <ActionButton label={t("history")} variant="secondary" size="icon" href={ROUTES.HISTORY}>
                     <HistoryIcon className="size-5" />

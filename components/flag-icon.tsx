@@ -19,6 +19,47 @@ export const FlagVi = ({ className }: { className?: string }) => (
     </svg>
 );
 
+export const FlagUs = ({ className }: { className?: string }) => {
+    return (
+        <svg
+            viewBox="0 0 540 360"
+            className={cn("h-auto", className)}
+            preserveAspectRatio="xMidYMid meet"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            {/* 1. Red Background */}
+            <rect width="540" height="360" fill="#B22234" />
+
+            {/* 2. The 6 White Stripes (placed to leave red stripes in between) */}
+            <g fill="#FFF">
+                <rect width="540" height="30" y="30" />
+                <rect width="540" height="30" y="90" />
+                <rect width="540" height="30" y="150" />
+                <rect width="540" height="30" y="210" />
+                <rect width="540" height="30" y="270" />
+                <rect width="540" height="30" y="330" />
+            </g>
+
+            {/* 3. Blue Canton (Ends perfectly on the 7th stripe) */}
+            <rect width="296" height="210" fill="#3C3B6E" />
+
+            {/* 4. Representative Stars (A clean 4x3 grid for small sizes) */}
+            <g fill="#FFF">
+                {[0, 1, 2, 3].map((x) =>
+                    [0, 1, 2].map((y) => (
+                        <circle
+                            key={`${x}-${y}`}
+                            cx={40 + x * 72}
+                            cy={35 + y * 70}
+                            r="6"
+                        />
+                    ))
+                )}
+            </g>
+        </svg>
+    );
+};
+
 export const FlagEn = ({ className }: { className?: string }) => (
     <svg
         viewBox="0 0 55.2 38.4"

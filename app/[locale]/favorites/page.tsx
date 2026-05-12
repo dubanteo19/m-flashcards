@@ -9,7 +9,7 @@ import { useTranslations } from "next-intl";
 export default function FavoritesPage() {
     const t = useTranslations("favorites");
     return (
-        <main className="container mx-auto py-10 px-4 max-w-6xl">
+        <main className="container mx-auto py-2 px-4 max-w-6xl">
             <header className="flex items-center gap-4 mb-10">
                 <div>
                     <h2>{t("title")}</h2>
