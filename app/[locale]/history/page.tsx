@@ -1,7 +1,7 @@
 "use client";
 import { CollectionCard } from "@/components/collection-card";
 import { EmptyState } from "@/components/empty-state";
-import Loader from "@/components/loader";
+import FullPageLoader from "@/components/loader";
 import { db } from "@/lib/db";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Clock } from "lucide-react";
@@ -34,7 +34,7 @@ function HistoryListFacade() {
 
     // 1. Loading State
     if (!history) {
-        return <Loader />;
+        return <FullPageLoader />;
     }
 
     // 2. Empty State

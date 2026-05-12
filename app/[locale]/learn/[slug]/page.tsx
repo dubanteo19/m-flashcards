@@ -4,7 +4,7 @@ import { ROUTES } from "@/app/lib/constants";
 import { Card } from "@/app/lib/types";
 import { Flag } from "@/components/flag-icon";
 import Flashcard from "@/components/flashcard";
-import Loader from "@/components/loader";
+import FullPageLoader from "@/components/loader";
 import { ActionButton } from "@/components/ui/action-button";
 import { Button } from "@/components/ui/button";
 import { LinkButton } from "@/components/ui/link-button";
@@ -64,7 +64,7 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
         }
     }, [collection]);
 
-    if (isLoading) return <Loader />
+    if (isLoading) return <FullPageLoader />
     if (!collection || cards.length === 0) return (
         <div className="min-h-screen flex-center flex-col ">
             <p className="mb-4">No cards found in this collection.</p>

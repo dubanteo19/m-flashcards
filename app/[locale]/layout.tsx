@@ -69,8 +69,7 @@ export default async function RootLayout({
         "font-sans"
       )}
     >
-
-      <body className="min-h-full flex flex-col bg-background text-foreground font-sans min-h-screen">
+      <body className="  flex flex-col bg-background text-foreground font-sans min-h-screen">
         <Providers>
           <NextIntlClientProvider messages={messages} locale={locale}  >
             <Header />

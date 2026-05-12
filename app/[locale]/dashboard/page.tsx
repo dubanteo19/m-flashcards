@@ -2,7 +2,7 @@
 
 import { ROUTES } from "@/app/lib/constants";
 import { Flag } from "@/components/flag-icon";
-import Loader from "@/components/loader";
+import FullPageLoader, { InlineLoader } from "@/components/loader";
 import { ActionButton } from "@/components/ui/action-button";
 import {
     AlertDialog,
@@ -19,13 +19,15 @@ import { LinkButton } from "@/components/ui/link-button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useAuth } from "@/context/AuthContext";
 import { useDeleteCollection, useUserCollections } from "@/hooks/useColleciton";
-import { BookOpen, Loader2, LogOut, Pencil, Plus, Trash } from "lucide-react";
+import { BookOpen, LogOut, Pencil, Plus, Trash } from "lucide-react"
 import { useState } from "react";
+
 export default function Dashboard() {
     const { username, logout } = useAuth();
     const { data: collections = [], isLoading } = useUserCollections(username ?? "");
     const [collectionToDelete, setCollectionToDelete] = useState<string | null>(null);
     const { mutate: deleteCollection, isPending: isDeleting } = useDeleteCollection();
+    // Confirm 
     const confirmDelete = async () => {
         if (!collectionToDelete) return
         try {
@@ -37,11 +39,10 @@ export default function Dashboard() {
         }
     };
     if (isLoading) {
-        return <Loader />
+        return <FullPageLoader />
     }
-
     return (
-        <div className="container mx-auto py-10 px-4">
+        <div className=" container mx-auto py-10 px-4">
             <div className="flex justify-between items-end mb-8">
                 <div>
                     <h2>My Collections</h2>
@@ -66,9 +67,13 @@ export default function Dashboard() {
                     </TableHeader>
                     <TableBody>
                         {isLoading ? (
-                            <TableRow><TableCell colSpan={4} className="h-32 text-center"><Loader2 className="animate-spin inline" /></TableCell></TableRow>
+                            <TableRow>
+                                <TableCell colSpan={4} className="h-32 text-center"><InlineLoader /></TableCell>
+                            </TableRow>
                         ) : collections.length === 0 ? (
-                            <TableRow><TableCell colSpan={4} className="h-32 text-center text-muted-foreground">No decks yet.</TableCell></TableRow>
+                            <TableRow>
+                                <TableCell colSpan={4} className="h-32 text-center text-muted-foreground">No decks yet.</TableCell>
+                            </TableRow>
                         ) : (
                             collections.map((collection) => (
                                 <TableRow key={collection.id}>
@@ -118,7 +123,7 @@ export default function Dashboard() {
                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                             disabled={isDeleting}
                         >
-                            {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                            {isDeleting && <InlineLoader />}
                             Delete
                         </AlertDialogAction>
                     </AlertDialogFooter>

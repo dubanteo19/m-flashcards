@@ -1,7 +1,7 @@
 "use client";
 import { CollectionCard } from "@/components/collection-card";
 import { EmptyState } from "@/components/empty-state";
-import Loader from "@/components/loader";
+import FullPageLoader from "@/components/loader";
 import { db } from "@/lib/db";
 import { favoritesService } from "@/services/favoriteService";
 import { useLiveQuery } from "dexie-react-hooks";
@@ -30,7 +30,7 @@ function FavoritesListFacade() {
 
     // 1. Loading State
     if (!favorites) {
-        return <Loader />;
+        return <FullPageLoader />;
     }
 
     // 2. Empty State

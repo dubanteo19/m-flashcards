@@ -2,7 +2,7 @@
 
 import BackButton from "@/components/back-button";
 import CollectionForm from "@/components/collection-form";
-import Loader from "@/components/loader";
+import FullPageLoader from "@/components/loader";
 import { useCollectionBySlug } from "@/hooks/useColleciton";
 import { use } from "react";
 
@@ -10,7 +10,7 @@ export default function EditCollectionPage({ params }: { params: Promise<{ slug:
     const resolvedParams = use(params);
     const slug = resolvedParams.slug;
     const { data: initialData, isLoading } = useCollectionBySlug(slug)
-    if (isLoading) return <Loader />
+    if (isLoading) return <FullPageLoader />
 
     return (
         <div className="container mx-auto py-10 max-w-3xl px-4">
