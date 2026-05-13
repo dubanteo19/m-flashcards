@@ -89,7 +89,7 @@ Return ONLY the raw JSON array. Do not include any markdown formatting like \`\`
 Mỗi object phải có chính xác các key sau:
 - "word": Từ vựng bằng chữ ${languageName}
 - "reading": Phiên âm hoặc romanization
-- "meaning": Nghĩa tiếng Anh
+- "meaning": Nghĩa tiếng Việt
 
 Chỉ trả về mảng JSON thô. Không thêm markdown như \`\`\`json hoặc bất kỳ phần giới thiệu nào.`
     };

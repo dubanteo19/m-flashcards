@@ -11,7 +11,14 @@ export default function proxy(request: NextRequest) {
     const response = intlMiddleware(request);
     const username = request.cookies.get("username")?.value;
     const pathname = request.nextUrl.pathname;
-    const locale = pathname.split("/")[1] || "vi";
+
+    const segments = pathname.split("/");
+    const maybeLocale = segments[1];
+
+    const locale = ["en", "vi"].includes(maybeLocale)
+        ? maybeLocale
+        : "vi";
+
     const pathnameWithoutLocale = pathname.replace(
         /^\/(en|vi)/,
         ""
