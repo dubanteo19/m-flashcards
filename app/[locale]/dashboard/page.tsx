@@ -1,6 +1,7 @@
 "use client";
 
 import { ROUTES } from "@/app/lib/constants";
+import { CooldownButton } from "@/components/buttons/cooldown-button";
 import { Flag } from "@/components/flag-icon";
 import FullPageLoader, { InlineLoader } from "@/components/loader";
 import { ActionButton } from "@/components/ui/action-button";
@@ -20,14 +21,15 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useAuth } from "@/context/AuthContext";
 import { useDeleteCollection, useUserCollections } from "@/hooks/useColleciton";
 import { BookOpen, LogOut, Pencil, Plus, Trash } from "lucide-react"
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 export default function Dashboard() {
     const { username, logout } = useAuth();
-    const { data: collections = [], isLoading } = useUserCollections(username ?? "");
+    const t = useTranslations();
+    const { data: collections = [], isLoading, refetch, isFetching } = useUserCollections(username ?? "");
     const [collectionToDelete, setCollectionToDelete] = useState<string | null>(null);
     const { mutate: deleteCollection, isPending: isDeleting } = useDeleteCollection();
-    // Confirm 
     const confirmDelete = async () => {
         if (!collectionToDelete) return
         try {
@@ -45,12 +47,17 @@ export default function Dashboard() {
         <div className=" container mx-auto py-10 px-4">
             <div className="flex justify-between items-end mb-8">
                 <div>
-                    <h2>My Collections</h2>
+                    <h3>{t("dashboard.collections")}</h3>
                     <p className="text-muted-foreground text-lg">Logged in as {username}</p>
                 </div>
                 <div className="flex gap-3">
-                    <LinkButton href={ROUTES.DASHBOARD_NEW}><Plus size={18} /> New Collection</LinkButton>
-                    <ActionButton label="Log out" variant="outline" onClick={logout}><LogOut size={16} /></ActionButton>
+                    <CooldownButton
+                        isFetching={isFetching}
+                        callback={refetch}
+                        text={t("common.refresh")}
+                    />
+                    <LinkButton href={ROUTES.DASHBOARD_NEW}><Plus size={18} />{t("dashboard.createCollection")}</LinkButton>
+                    <ActionButton label={t("dashboard.logout")} variant="outline" onClick={logout}><LogOut size={16} /></ActionButton>
                 </div>
             </div>
 
@@ -58,11 +65,11 @@ export default function Dashboard() {
                 <Table>
                     <TableHeader className="bg-muted/50">
                         <TableRow>
-                            <TableHead>Collection</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Cards</TableHead>
-                            <TableHead>Language</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
+                            <TableHead>{t("dashboard.table.name")}</TableHead>
+                            <TableHead>{t("dashboard.table.status")}</TableHead>
+                            <TableHead>{t("dashboard.table.cards")}</TableHead>
+                            <TableHead>{t("dashboard.table.language")}</TableHead>
+                            <TableHead className="text-right">{t("dashboard.table.actions")}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -80,23 +87,23 @@ export default function Dashboard() {
                                     <TableCell className="font-semibold">{collection.title}</TableCell>
                                     <TableCell>
                                         <Badge variant={collection.is_published ? "default" : "secondary"}>
-                                            {collection.is_published ? "Public" : "Draft"}
+                                            {collection.is_published ? t("common.public") : t("common.private")}
                                         </Badge>
                                     </TableCell>
-                                    <TableCell>{collection.cards_count} cards</TableCell>
+                                    <TableCell>{collection.cards_count} {t("dashboard.table.cards")}</TableCell>
                                     <TableCell>
                                         <div>
                                             <Flag language={collection.language} />
                                         </div>
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        <ActionButton variant="outline" size="sm" label="Edit" href={ROUTES.DASHBOARD_EDIT(collection.slug)}>
+                                        <ActionButton label={t("common.edit")} variant="outline" size="sm" href={ROUTES.DASHBOARD_EDIT(collection.slug)}>
                                             <Pencil size={14} />
                                         </ActionButton>
-                                        <ActionButton label="Delete" variant="destructive" size="sm" onClick={() => setCollectionToDelete(collection.slug || null)}>
+                                        <ActionButton label={t("common.delete")} variant="destructive" size="sm" onClick={() => setCollectionToDelete(collection.slug || null)}>
                                             <Trash size={14} />
                                         </ActionButton>
-                                        <ActionButton size="sm" label="Learn" href={ROUTES.LEARN(collection.slug)}>
+                                        <ActionButton size="sm" label={t("common.learn")} href={ROUTES.LEARN(collection.slug)}>
                                             <BookOpen size={14} />
                                         </ActionButton>
                                     </TableCell>
@@ -110,21 +117,20 @@ export default function Dashboard() {
             <AlertDialog open={!!collectionToDelete} onOpenChange={(open) => !open && setCollectionToDelete(null)}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogTitle>{t("dashboard.dialog.deleteTitle")}</AlertDialogTitle>
                         <AlertDialogDescription>
-                            This will permanently delete the collection and all its cards.
-                            This action cannot be undone.
+                            {t("dashboard.dialog.deleteMessage")}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+                        <AlertDialogCancel disabled={isDeleting}>{t("dashboard.dialog.cancel")}</AlertDialogCancel>
                         <AlertDialogAction
                             onClick={confirmDelete}
                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                             disabled={isDeleting}
                         >
                             {isDeleting && <InlineLoader />}
-                            Delete
+                            {t("dashboard.dialog.confirm")}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

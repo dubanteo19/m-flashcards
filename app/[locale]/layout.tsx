@@ -1,16 +1,16 @@
-import type { Metadata } from "next";
-import {
-  Geist_Mono,
-  Be_Vietnam_Pro,
-  Geist
-} from "next/font/google";
-import { NextIntlClientProvider } from "next-intl";
-import { cn } from "@/lib/utils";
-import { Toaster } from "sonner";
-import Header from "@/components/layout/header";
-import Footer from "@/components/layout/footer";
-import { getMessages } from "next-intl/server";
 import { Providers } from "@/app/providers/providers";
+import Footer from "@/components/layout/footer";
+import Header from "@/components/layout/header";
+import { cn } from "@/lib/utils";
+import type { Metadata } from "next";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
+import {
+  Be_Vietnam_Pro,
+  Geist,
+  Geist_Mono
+} from "next/font/google";
+import { Toaster } from "sonner";
 const beVietnam = Be_Vietnam_Pro({
   subsets: ["latin", "vietnamese"],
   variable: "--font-sans",
@@ -56,7 +56,6 @@ export default async function RootLayout({
 
   const messages = await getMessages();
   const { locale } = await params;
-
   return (
     <html
       lang={locale}
@@ -69,7 +68,7 @@ export default async function RootLayout({
         "font-sans"
       )}
     >
-      <body className="  flex flex-col bg-background text-foreground font-sans min-h-screen">
+      <body className="flex flex-col bg-background text-foreground font-sans min-h-screen">
         <Providers>
           <NextIntlClientProvider messages={messages} locale={locale}  >
             <Header />
