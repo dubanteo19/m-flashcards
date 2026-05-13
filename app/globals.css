@@ -56,7 +56,7 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.148 0.004 228.8);
   --primary: oklch(0.852 0.199 91.936);
-  --primary-foreground: oklch(0.421 0.095 57.708);
+  --primary-foreground: oklch(0.148 0.004 228.8);
   --secondary: oklch(0.967 0.001 286.375);
   --secondary-foreground: oklch(0.21 0.006 285.885);
   --muted: oklch(0.963 0.002 197.1);
@@ -131,23 +131,23 @@
   }
 
   h1 {
-    @apply text-4xl font-extrabold tracking-tight lg:text-5xl;
+    @apply text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight;
   }
 
   h2 {
-    @apply text-3xl font-semibold border-b pb-2 transition-colors first:mt-0;
+    @apply text-2xl sm:text-3xl font-semibold border-b pb-2 transition-colors first:mt-0;
   }
 
   h3 {
-    @apply text-2xl font-semibold tracking-tight;
+    @apply text-xl sm:text-2xl font-semibold tracking-tight;
   }
 
   h4 {
-    @apply text-xl font-semibold tracking-tight;
+    @apply text-lg sm:text-xl font-semibold tracking-tight;
   }
 
   h5 {
-    @apply text-lg font-semibold;
+    @apply text-base sm:text-lg font-semibold;
   }
 
   /* Optional: Add default spacing for better readability */

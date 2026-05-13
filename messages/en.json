@@ -2,7 +2,14 @@
     "common": {
         "refresh": "Refresh",
         "loading": "Loading",
-        "learn": "Learn"
+        "edit": "Edit",
+        "delete": "Delete",
+        "learn": "Learn",
+        "collection": "Collection",
+        "public": "Public",
+        "private": "Private",
+        "backToDashboard": "Back to Dashboard",
+        "language": "Language"
     },
     "header": {
         "subtitle": "Small app to help you learn vocabulary",
@@ -19,6 +26,49 @@
             "clickToFlip": "Click to flip",
             "front": "Front",
             "meaning": "Meaning"
+        }
+    },
+    "login": {
+        "title": "Contributor Login",
+        "subtitle": "Enter your username to manage your collections",
+        "enterDashboard": "Enter Dashboard",
+        "usernamePlaceholder": "Username (e.g. Tanaka_Dev)"
+    },
+    "dashboard": {
+        "collections": "My Collections",
+        "createCollection": "Create collection",
+        "logout": "Logout",
+        "table": {
+            "name": "Name",
+            "cards": "Cards",
+            "actions": "Actions",
+            "status": "Status",
+            "language": "Language"
+        },
+        "dialog": {
+            "deleteTitle": "Confirm Deletion",
+            "deleteMessage": "Are you sure you want to delete this collection? This action cannot be undone.",
+            "cancel": "Cancel",
+            "confirm": "Delete"
+        },
+        "form": {
+            "createTitle": "Create New Collection",
+            "editTitle": "Edit Collection",
+            "editSubTitle": "Updating Collection",
+            "subTitle": "Set up your new flashcard deck as",
+            "titlePlaceholder": "Enter a title for your collection",
+            "descriptionPlaceholder": "Enter a description (optional)",
+            "titlePlace ": "Collection Title",
+            "copyPrompt": "Copy from existing collection",
+            "submitButton": "Save Collection",
+            "pasteJsonHere": "Paste the JSON array here. Ensure keys are \"word\", \"reading\", and \"meaning\".",
+            "promptTemplate": {
+                "title": "AI Prompt Helper",
+                "subTitle": "Use the template below to create your flashcards. Each card should be an object with \"word\", \"reading\", and \"meaning\" keys.",
+                "copied": "Copied!",
+                "copy": "Copy Prompt",
+                "tips": "Tip: Paste this into ChatGPT or Gemini, then copy the result into the JSON tab."
+            }
         }
     },
     "favorites": {

@@ -3,7 +3,7 @@
 import { ROUTES } from "@/app/lib/constants";
 import { Badge } from "@/components/ui/badge";
 import { useStats } from "@/hooks/use-stats";
-import { HeartIcon, HistoryIcon } from "lucide-react";
+import { BookPlusIcon, HeartIcon, HistoryIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { AppLanguageSelector } from "../app-language-selector";
@@ -24,9 +24,6 @@ export default function Header() {
             </div>
 
             <div className="flex justify-between items-center gap-2 md:gap-4">
-                <LinkButton variant="outline" href={ROUTES.HISTORY}>
-                    {t("contribute")}
-                </LinkButton>
                 {/* History Action */}
                 <ActionButton label={t("history")} variant="secondary" size="icon" href={ROUTES.HISTORY}>
                     <HistoryIcon className="size-5" />
@@ -45,6 +42,15 @@ export default function Header() {
                     </div>
                 </ActionButton>
                 <AppLanguageSelector />
+                <LinkButton variant="outline" href={ROUTES.DASHBOARD}>
+                    <span className="sm:hidden">
+                        <BookPlusIcon  />
+                    </span>
+
+                    <span className="hidden sm:inline">
+                        {t("contribute")}
+                    </span>
+                </LinkButton>
             </div>
         </header>
     );

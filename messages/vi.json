@@ -2,7 +2,14 @@
     "common": {
         "refresh": "Làm mới",
         "loading": "Đang tải",
-        "learn": "Học"
+        "edit": "Chỉnh sửa",
+        "delete": "Xóa",
+        "learn": "Học",
+        "collection": "Bộ sưu tập",
+        "public": "Công khai",
+        "private": "Riêng tư",
+        "backToDashboard": "Quay lại bảng điều khiển",
+        "language": "Ngôn ngữ"
     },
     "header": {
         "subtitle": "Ứng dụng nhỏ giúp bạn học từ vựng",
@@ -19,6 +26,49 @@
             "clickToFlip": "Nhấp để lật thẻ",
             "front": "Mặt trước",
             "meaning": "Nghĩa"
+        }
+    },
+    "login": {
+        "title": "Đăng nhập để đóng góp",
+        "subtitle": "Nhập tên người dùng của bạn để quản lý bộ sưu tập của bạn",
+        "enterDashboard": "Vào bảng điều khiển",
+        "usernamePlaceholder": "Tên người dùng (ví dụ: dbt19_dev)"
+    },
+    "dashboard": {
+        "collections": "Bộ sưu tập của tôi",
+        "createCollection": "Tạo bộ sưu tập",
+        "logout": "Đăng xuất",
+        "table": {
+            "name": "Tên",
+            "cards": "Thẻ",
+            "actions": "Hành động",
+            "status": "Trạng thái",
+            "language": "Ngôn ngữ"
+        },
+        "dialog": {
+            "deleteTitle": "Xác nhận Xóa",
+            "deleteMessage": "Bạn có chắc chắn muốn xóa bộ sưu tập này? Hành động này không thể hoàn tác.",
+            "cancel": "Hủy",
+            "confirm": "Xóa"
+        },
+        "form": {
+            "createTitle": "Tạo Bộ Sưu Tập Mới",
+            "editTitle": "Chỉnh sửa Bộ Sưu Tập",
+            "editSubTitle": "Đang cập nhật Bộ Sưu Tập",
+            "subTitle": "Thiết lập bộ thẻ flashcard mới của bạn như sau",
+            "titlePlaceholder": "Nhập tiêu đề cho bộ sưu tập của bạn",
+            "descriptionPlaceholder": "Nhập mô tả (tùy chọn)",
+            "titlePlace ": "Tên Bộ Sưu Tập",
+            "copyPrompt": "Sao chép từ bộ sưu tập hiện có",
+            "submitButton": "Lưu Bộ Sưu Tập",
+            "pasteJsonHere": "Dán mảng JSON vào đây. Đảm bảo các khóa là \"word\", \"reading\" và \"meaning\".",
+            "promptTemplate": {
+                "title": "AI Prompt Mẫu",
+                "subTitle": "Trợ giúp tạo prompt AI tùy chỉnh cho chủ đề và ngôn ngữ của bạn",
+                "copied": "Đã sao chép!",
+                "copy": "Sao chép Prompt",
+                "tips": "Mẹo: Dán điều này vào ChatGPT hoặc Gemini, sau đó sao chép kết quả vào tab JSON."
+            }
         }
     },
     "favorites": {

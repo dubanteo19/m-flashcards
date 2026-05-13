@@ -1,15 +1,17 @@
 "use client";
 
-import { SyntheticEvent, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Languages } from "lucide-react";
-import { setCookie } from "cookies-next";
 import { ROUTES } from "@/app/lib/constants";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { setCookie } from "cookies-next";
+import { Languages } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { SyntheticEvent, useState } from "react";
 export default function LoginPage() {
     const [username, setUsername] = useState("");
+    const t = useTranslations("login");
     const router = useRouter();
     const handleLogin = async (e: SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -33,13 +35,13 @@ export default function LoginPage() {
                             <Languages size={32} />
                         </div>
                     </div>
-                    <CardTitle className="text-2xl font-bold">Contributor Login</CardTitle>
-                    <CardDescription>Enter your username to manage your collections</CardDescription>
+                    <CardTitle className="text-2xl font-bold">{t("title")}</CardTitle>
+                    <CardDescription>{t("subtitle")}</CardDescription>
                 </CardHeader>
                 <form onSubmit={handleLogin}>
                     <CardContent>
                         <Input
-                            placeholder="Username (e.g. Tanaka_Dev)"
+                            placeholder={t("usernamePlaceholder")}
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             className="text-lg py-6"
@@ -48,7 +50,7 @@ export default function LoginPage() {
                     </CardContent>
                     <CardFooter className="mt-4">
                         <Button type="submit" className="w-full text-lg py-6" disabled={!username.trim()}>
-                            Enter Dashboard
+                            {t("enterDashboard")}
                         </Button>
                     </CardFooter>
                 </form>

@@ -13,12 +13,14 @@ import PromptTemplate from "./prompt-tempate";
 import { useSaveCollection } from "@/hooks/useColleciton";
 import { LanguageSelector } from "./filter/language-selector";
 import { LanguageCode } from "@/app/lib/enums";
+import { useTranslations } from "next-intl";
 
 interface CollectionFormProps {
     initialData?: Collection;
 }
 export default function CollectionForm({ initialData }: CollectionFormProps) {
     const { username } = useAuth();
+    const t = useTranslations();
     const [title, setTitle] = useState(initialData?.title || "");
     const [topic, setTopic] = useState("");
     const [desc, setDesc] = useState(initialData?.description || "");
@@ -64,7 +66,7 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
         <div className="space-y-6">
             <div className="grid gap-4">
                 <div className="space-y-2">
-                    <label className="text-sm font-medium">Language</label>
+                    <label className="text-sm font-medium">{t("common.language")}</label>
                     <LanguageSelector
                         selected={language}
                         onSelect={setLanguage}
@@ -72,14 +74,14 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
                     />
                 </div>
                 <Input
-                    placeholder="Collection Title"
+                    placeholder={t("dashboard.form.titlePlaceholder")}
                     maxLength={200}
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     className="text-lg font-bold"
                 />
                 <Textarea
-                    placeholder="Description (Optional)"
+                    placeholder={t("dashboard.form.descriptionPlaceholder")}
                     maxLength={150}
                     value={desc}
                     onChange={(e) => setDesc(e.target.value)}
@@ -102,7 +104,7 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
                     <PromptTemplate lang={language} topic={topic} />
                     <div className="text-xs bg-muted p-3 rounded-md flex items-start gap-2">
                         <AlertCircle size={14} className="mt-0.5" />
-                        <span>Paste the JSON array here. Ensure keys are &quot;word&quot;, &quot;reading&quot;, and &quot;meaning&quot;.</span>
+                        <span>{t("dashboard.form.pasteJsonHere")}</span>
                     </div>
                     <Textarea
                         className="h-[300px] font-mono text-sm"
@@ -118,7 +120,7 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
             </Tabs>
 
             <Button onClick={handleSubmit} className="w-full" disabled={isPending}>
-                {isPending ? "Saving..." : <><Save size={18} className="mr-2" /> Save Collection</>}
+                {isPending ? "Saving..." : <><Save size={18} className="mr-2" /> {t("dashboard.form.submitButton")}</>}
             </Button>
         </div>
     );
