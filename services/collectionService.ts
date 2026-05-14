@@ -17,6 +17,7 @@ export const collectionService = {
         let query = supabase
             .from("collections")
             .select("*, cards(count)")
+            .eq("is_published", true)
             .order("created_at", { ascending: false });
         if (filters.language) query = query.eq("language", filters.language);
         if (filters.author) query = query.eq("author_username", filters.author);

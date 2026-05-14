@@ -14,6 +14,7 @@ import { useSaveCollection } from "@/hooks/useColleciton";
 import { LanguageSelector } from "./filter/language-selector";
 import { LanguageCode } from "@/app/lib/enums";
 import { useTranslations } from "next-intl";
+import { PublicSelector } from "./filter/public-selector";
 
 interface CollectionFormProps {
     initialData?: Collection;
@@ -23,6 +24,7 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
     const t = useTranslations();
     const [title, setTitle] = useState(initialData?.title || "");
     const [topic, setTopic] = useState("");
+    const [isPublished, setIsPublished] = useState<boolean>(initialData?.is_published || true);
     const [desc, setDesc] = useState(initialData?.description || "");
     const [language, setLanguage] = useState(initialData?.language || LanguageCode.English);
     const [jsonInput, setJsonInput] = useState(
@@ -44,7 +46,7 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
                     title,
                     language,
                     description: desc,
-                    is_published: true,
+                    is_published: isPublished,
                     cards
                 }
             }, {
@@ -63,15 +65,22 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 " >
             <div className="grid gap-4">
-                <div className="space-y-2">
-                    <label className="text-sm font-medium">{t("common.language")}</label>
-                    <LanguageSelector
-                        selected={language}
-                        onSelect={setLanguage}
-                        showAll={false}
+                <div className="flex justify-between items-center gap-4">
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">{t("common.language")}</label>
+                        <LanguageSelector
+                            selected={language}
+                            onSelect={setLanguage}
+                            showAll={false}
+                        />
+                    </div>
+                    <PublicSelector
+                        selected={isPublished}
+                        onSelect={setIsPublished}
                     />
+
                 </div>
                 <Input
                     placeholder={t("dashboard.form.titlePlaceholder")}

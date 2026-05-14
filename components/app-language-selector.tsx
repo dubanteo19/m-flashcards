@@ -33,10 +33,10 @@ export const AppLanguageSelector = () => {
                 <SelectValue />
             </SelectTrigger>
 
-            <SelectContent className="min-w-[70px] ">
+            <SelectContent className="min-w-[70px] " position="popper">
                 <SelectGroup>
                     <SelectItem value="en">
-                        <FlagUs className="w-16"  />
+                        <FlagUs className="w-16" />
                     </SelectItem>
                     <SelectItem value="vi">
                         <FlagVi className="w-16" />
