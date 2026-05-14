@@ -28,24 +28,82 @@ const geistMono = Geist_Mono({
 });
 
 // --- UPDATED METADATA ---
-export const metadata: Metadata = {
-  title: {
-    default: "M Flashcard | Learn vocabulary fast",
-    template: "%s | M Flashcard"
-  },
-  description: "A community-driven platform to learn multiple languages vocabulary. Create, share, and study flashcard collections with ease.",
-  keywords: ["Vocabulary", "Flashcard", "Learning", "Multiple Languages", "M Flashcard"],
-  authors: [{ name: "M Flashcard Team" }],
-  openGraph: {
-    title: "M Flashcard",
-    description: "Master vocabulary with our community-sourced flashcard.",
-    type: "website",
-    locale: "en_US",
-    url: "https://m-flashcard.dbt19.store",
-    siteName: "M Flashcard",
-  },
-};
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
 
+  const meta = {
+    en: {
+      title: "M Flashcard | Learn vocabulary fast",
+      description:
+        "A community-driven platform to learn multiple languages vocabulary. Create, share, and study flashcard collections with ease.",
+      ogLocale: "en_US"
+    },
+    vi: {
+      title: "M Flashcard | Học từ vựng nhanh chóng",
+      description:
+        "Nền tảng học từ vựng đa ngôn ngữ do cộng đồng xây dựng. Tạo, chia sẻ và học bộ flashcard dễ dàng.",
+      ogLocale: "vi_VN"
+    }
+  }[locale] ?? {
+    title: "M Flashcard",
+    description: "Learn vocabulary fast",
+    ogLocale: "en_US"
+  };
+
+  return {
+    metadataBase: new URL("https://fc.dbt19.site"),
+    title: {
+      default: meta.title,
+      template: "%s | M Flashcard"
+    },
+    description: meta.description,
+    alternates: {
+      canonical: `/${locale}`,
+      languages: {
+        en: "/en",
+        vi: "/vi"
+      }
+    },
+    keywords: [
+      "Vocabulary",
+      "Flashcard",
+      "Learning",
+      "Multiple Languages",
+      "M Flashcard"
+    ],
+
+    authors: [{ name: "Dbt19's Team" }],
+
+    openGraph: {
+      title: meta.title,
+      description: meta.description,
+      type: "website",
+      locale: meta.ogLocale,
+      url: `https://fc.dbt19.site/${locale}`,
+      siteName: "M Flashcard",
+
+      images: [
+        {
+          url: "/og-image.png",
+          width: 1200,
+          height: 630,
+          alt: "M Flashcard"
+        }
+      ]
+    },
+
+    twitter: {
+      card: "summary_large_image",
+      title: meta.title,
+      description: meta.description,
+      images: ["/og-image.png"]
+    }
+  };
+}
 export default async function RootLayout({
   children,
   params
