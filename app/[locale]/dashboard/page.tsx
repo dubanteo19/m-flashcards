@@ -50,13 +50,13 @@ export default function Dashboard() {
                     <h3>{t("dashboard.collections")}</h3>
                     <p className="text-muted-foreground text-lg">Logged in as {username}</p>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex gap-3 flex-wrap">
                     <CooldownButton
                         isFetching={isFetching}
                         callback={refetch}
                         text={t("common.refresh")}
                     />
-                    <LinkButton href={ROUTES.DASHBOARD_NEW}><Plus size={18} />{t("dashboard.createCollection")}</LinkButton>
+                    <LinkButton className="rounded-full" href={ROUTES.DASHBOARD_NEW}><Plus className="size-4" /></LinkButton>
                     <ActionButton label={t("dashboard.logout")} variant="outline" onClick={logout}><LogOut size={16} /></ActionButton>
                 </div>
             </div>

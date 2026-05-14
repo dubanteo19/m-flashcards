@@ -2,6 +2,7 @@
 
 import { ROUTES } from "@/app/lib/constants";
 import { Card } from "@/app/lib/types";
+import EncouragementPopup from "@/components/encouragement-popup";
 import { Flag } from "@/components/flag-icon";
 import Flashcard from "@/components/flashcard";
 import FullPageLoader from "@/components/loader";
@@ -109,7 +110,7 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
                         }}
                         className={cn("w-full", isDragging ? "pointer-events-none" : "pointer-events-auto")}
                     >
-                        <Flashcard card={cards[currentIndex]} />
+                        <Flashcard language={collection.language} card={cards[currentIndex]} />
                     </motion.div>
                 </AnimatePresence>
             </div>

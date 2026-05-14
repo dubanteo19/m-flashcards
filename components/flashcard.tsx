@@ -2,13 +2,49 @@
 import { FlashcardView } from "@/app/lib/types";
 import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import { AudioLinesIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { SyntheticEvent, useState } from "react";
+import { Button } from "./ui/button";
+import { LanguageCode, languageMap } from "@/app/lib/enums";
 
-export default function Flashcard({ card }: { card: FlashcardView }) {
+interface FlashcardProps {
+    card: FlashcardView,
+    language: LanguageCode
+}
+export default function Flashcard({ card, language }: FlashcardProps) {
     const t = useTranslations("learn.card");
     const [isFlipped, setIsFlipped] = useState(false);
+    const handlePlaySound = (e: SyntheticEvent) => {
+        e.stopPropagation();
+        if (!window.speechSynthesis) return;
+        const lang = languageMap[language];
+        const voices = window.speechSynthesis.getVoices();
+        // Prefer high quality voices first
+        const voice =
+            voices.find(
+                v =>
+                    v.lang === lang &&
+                    v.name.toLowerCase().includes("google")
+            ) ||
+            voices.find(
+                v =>
+                    v.lang === lang &&
+                    v.name.toLowerCase().includes("microsoft")
+            ) ||
+            voices.find(v => v.lang === lang) ||
+            voices.find(v => v.lang.startsWith(language));
 
+        const utterance = new SpeechSynthesisUtterance(card.word);
+
+        utterance.lang = lang;
+        utterance.voice = voice || null;
+        utterance.rate = 0.9;
+        utterance.pitch = 1;
+
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utterance);
+    };
     return (
         <div
             className="relative w-full max-w-md h-64 cursor-pointer perspective-1000"
@@ -23,7 +59,21 @@ export default function Flashcard({ card }: { card: FlashcardView }) {
                 {/* Front Side */}
                 <Card className="absolute inset-0 backface-hidden flex flex-col items-center justify-center p-6 shadow-xl">
                     <span className="text-sm text-muted-foreground mb-2">{t("front")}</span>
-                    <h2 className="text-5xl  tracking-tighter">{card.word}</h2>
+                    <div className="relative inline-block">
+                        <h2 className="text-5xl tracking-tighter">
+                            {card.word}
+                        </h2>
+
+                        <Button
+                            onClick={handlePlaySound}
+                            size="icon"
+                            className="absolute -top-3 -right-10 rounded-full"
+                            variant="destructive"
+                        >
+                            <AudioLinesIcon className="size-4" />
+                        </Button>
+                    </div>
+
                     <p className="mt-4 text-muted-foreground italic">{t("clickToFlip")}</p>
                 </Card>
 
