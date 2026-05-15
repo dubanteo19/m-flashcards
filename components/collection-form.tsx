@@ -63,7 +63,23 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
             toast.error("Invalid JSON format. Please check your brackets.");
         }
     };
-
+    const handleAIGenerate = async () => {
+        try {
+            const res = await fetch("/api/generate", {
+                method: "POST",
+                body: JSON.stringify({
+                    topic,
+                    language,
+                }),
+            });
+            const data = await res.json();
+            setJsonInput(JSON.stringify(data, null, 2));
+            toast.success("AI generated successfully!");
+        } catch (error) {
+            toast.error("Failed to generate AI content.");
+            console.error(error);
+        }
+    }
     return (
         <div className="space-y-6 " >
             <div className="grid gap-4">
@@ -115,6 +131,7 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
                         <AlertCircle size={14} className="mt-0.5" />
                         <span>{t("dashboard.form.pasteJsonHere")}</span>
                     </div>
+                    <Button onClick={handleAIGenerate}>AI Generate</Button>
                     <Textarea
                         className="h-[300px] font-mono text-sm"
                         placeholder='[{"word": "猫", "reading": "ねこ", "meaning": "Cat"}]'
