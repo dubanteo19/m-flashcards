@@ -8,7 +8,7 @@ import Link from "next/link";
 import { ReactNode } from "react";
 
 interface ActionButtonProps extends ButtonProps {
-    label: string;
+    label?: string;
     href?: string;
     side?: "top" | "bottom" | "left" | "right";
     children: ReactNode;
@@ -29,9 +29,11 @@ export const ActionButton = ({
                     {href ? <Link href={href}>{children}</Link> : children}
                 </Button>
             </TooltipTrigger>
-            <TooltipContent side={side}>
-                <p>{label}</p>
-            </TooltipContent>
+            {label && (
+                <TooltipContent side={side}>
+                    {label}
+                </TooltipContent>
+            )}
         </Tooltip>
 
     );

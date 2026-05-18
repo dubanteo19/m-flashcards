@@ -35,7 +35,7 @@
         "usernamePlaceholder": "Tên người dùng (ví dụ: dbt19_dev)"
     },
     "dashboard": {
-        "collections": "Bộ sưu tập của tôi",
+        "collections": "Bộ sưu tập của",
         "createCollection": "Tạo bộ sưu tập",
         "logout": "Đăng xuất",
         "table": {

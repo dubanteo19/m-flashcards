@@ -9,6 +9,7 @@ import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CooldownButton } from "./buttons/cooldown-button";
 import { ExploreListFacade } from "./explore-list-facade";
+import { RefreshCcw, RefreshCcwIcon } from "lucide-react";
 
 export default function HomePageContent() {
     const router = useRouter();
@@ -37,15 +38,18 @@ export default function HomePageContent() {
             <div className="flex items-center justify-between gap-4">
                 <FilterBar filters={filters} onChange={updateFilter} />
                 <CooldownButton
+                    label={t("refresh")}
                     isFetching={isFetching}
                     callback={refetch}
-                    text={t("refresh")}
-                />
-            </div>
+                >
+                    <RefreshCcwIcon />
+                </CooldownButton>
+
+            </div >
             <ExploreListFacade
                 collections={collections}
                 hasFilters={hasFilters}
             />
-        </div>
+        </div >
     );
 }

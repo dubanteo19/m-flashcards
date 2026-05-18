@@ -1,20 +1,23 @@
 "use client";
 
+import { LanguageCode } from "@/app/lib/enums";
 import { Collection } from "@/app/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/context/AuthContext";
+import { useAIGenerate } from "@/hooks/useAI";
+import { useSaveCollection } from "@/hooks/useColleciton";
 import { AlertCircle, Save, Sparkles } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
-import PromptTemplate from "./prompt-tempate";
-import { useSaveCollection } from "@/hooks/useColleciton";
+import { CooldownButton } from "./buttons/cooldown-button";
 import { LanguageSelector } from "./filter/language-selector";
-import { LanguageCode } from "@/app/lib/enums";
-import { useTranslations } from "next-intl";
 import { PublicSelector } from "./filter/public-selector";
+import { AILoader } from "./loader";
+import PromptTemplate from "./prompt-tempate";
 
 interface CollectionFormProps {
     initialData?: Collection;
@@ -31,7 +34,7 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
         initialData?.cards ? JSON.stringify(initialData.cards, null, 2) : ""
     );
     const { mutate: saveCollection, isPending } = useSaveCollection();
-
+    const { mutateAsync: triggerAIGenerate, isPending: isAIPending } = useAIGenerate();
     const handleSubmit = async () => {
         if (!title || !jsonInput) return toast.error("Title and Cards are required");
         if (!username) return toast.error("You must be logged in to save a collection");
@@ -63,22 +66,20 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
             toast.error("Invalid JSON format. Please check your brackets.");
         }
     };
+
     const handleAIGenerate = async () => {
+        if (!topic) return toast.error("Please enter a topic for AI generation");
         try {
-            const res = await fetch("/api/generate", {
-                method: "POST",
-                body: JSON.stringify({
-                    topic,
-                    language,
-                }),
-            });
-            const data = await res.json();
-            setJsonInput(JSON.stringify(data, null, 2));
-            toast.success("AI generated successfully!");
-        } catch (error) {
-            toast.error("Failed to generate AI content.");
-            console.error(error);
+            const cards = await triggerAIGenerate({ topic, language });
+            console.log("AI generated cards:", cards);
+            setJsonInput(JSON.stringify(cards, null, 2));
+        } catch (e) {
+            toast.error("AI generation failed. Please try again.");
+            console.error(e);
         }
+    };
+    if (isAIPending) {
+        return (<AILoader />);
     }
     return (
         <div className="space-y-6 " >
@@ -100,7 +101,7 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
                 </div>
                 <Input
                     placeholder={t("dashboard.form.titlePlaceholder")}
-                    maxLength={200}
+                    maxLength={100}
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     className="text-lg font-bold"
@@ -131,7 +132,21 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
                         <AlertCircle size={14} className="mt-0.5" />
                         <span>{t("dashboard.form.pasteJsonHere")}</span>
                     </div>
-                    <Button onClick={handleAIGenerate}>AI Generate</Button>
+
+                    <CooldownButton
+                        isFetching={isAIPending}
+                        variant={"default"}
+                        disabled={!topic}
+                        callback={handleAIGenerate}
+                        cooldownDuration={5000}
+                    >
+                        <Sparkles
+                            size={18}
+                            className="mr-2"
+                        />
+                        AI Generate
+                    </CooldownButton>
+
                     <Textarea
                         className="h-[300px] font-mono text-sm"
                         placeholder='[{"word": "猫", "reading": "ねこ", "meaning": "Cat"}]'

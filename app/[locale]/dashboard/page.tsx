@@ -20,7 +20,7 @@ import { LinkButton } from "@/components/ui/link-button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useAuth } from "@/context/AuthContext";
 import { useDeleteCollection, useUserCollections } from "@/hooks/useColleciton";
-import { BookOpen, LogOut, Pencil, Plus, Trash } from "lucide-react"
+import { BookOpen, LogOut, Pencil, Plus, RefreshCcwIcon, Trash } from "lucide-react"
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -47,16 +47,24 @@ export default function Dashboard() {
         <div className=" container mx-auto py-10 px-4">
             <div className="flex justify-between items-end mb-8">
                 <div>
-                    <h3>{t("dashboard.collections")}</h3>
-                    <p className="text-muted-foreground text-lg">Logged in as {username}</p>
-                </div>
-                <div className="flex gap-3 flex-wrap">
+                    <h3 className="font-normal">{t("dashboard.collections")}
+                        <strong>
+
+                            {username}
+                        </strong>
+                    </h3>
                     <CooldownButton
                         isFetching={isFetching}
+                        label={t("common.refresh")}
                         callback={refetch}
-                        text={t("common.refresh")}
-                    />
-                    <LinkButton className="rounded-full" href={ROUTES.DASHBOARD_NEW}><Plus className="size-4" /></LinkButton>
+                    >
+                        <RefreshCcwIcon />
+                    </CooldownButton>
+                </div>
+                <div className="flex gap-3 flex-wrap">
+                    <LinkButton
+                        className="rounded-full"
+                        href={ROUTES.DASHBOARD_NEW}><Plus className="size-4" />{t("dashboard.createCollection")}</LinkButton>
                     <ActionButton label={t("dashboard.logout")} variant="outline" onClick={logout}><LogOut size={16} /></ActionButton>
                 </div>
             </div>

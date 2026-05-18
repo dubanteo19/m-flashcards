@@ -1,16 +1,28 @@
 "use client"
 
 import { useCooldown } from "@/hooks/useCooldown";
-import { InlineLoader } from "../loader";
-import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
+import { ReactNode } from "react";
+import { ActionButton } from "../ui/action-button";
+import { ButtonProps } from "../ui/button";
 
-interface CooldownButtonProps {
+interface CooldownButtonProps extends ButtonProps {
     isFetching: boolean;
+    disabled?: boolean;
+    label?: string;
+    children: ReactNode,
     callback: () => void;
-    text: string
     cooldownDuration?: number;
 }
-export const CooldownButton = ({ isFetching, callback, text, cooldownDuration = 4000 }: CooldownButtonProps) => {
+export const CooldownButton = ({
+    isFetching,
+    disabled,
+    label,
+    callback,
+    children,
+    cooldownDuration = 4000,
+    ...props
+}: CooldownButtonProps) => {
     const { trigger, cooldown } = useCooldown(cooldownDuration);
 
     const handleClick = () => {
@@ -18,13 +30,14 @@ export const CooldownButton = ({ isFetching, callback, text, cooldownDuration = 
         trigger();
     };
     return (
-        <Button
+        <ActionButton
             variant="outline"
             size="sm"
-            disabled={isFetching || cooldown}
-            onClick={handleClick}
-        >
-            {isFetching ? <><InlineLoader /> {text}...</> : text}
-        </Button>
+            className={cn(isFetching && "animate-spin", cooldown && "cursor-not-allowed")}
+            disabled={isFetching || cooldown || disabled}
+            {...props}
+            onClick={handleClick} label={label}    >
+            {children}
+        </ ActionButton>
     );
 };

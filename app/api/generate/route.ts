@@ -19,9 +19,9 @@ export async function POST(req: Request) {
 Generate exactly 15 ${language} vocabulary words about ${topic}.
 
 Each item must contain:
-- word
-- reading
-- meaning
+- word (max length 20 characters)
+- reading (phonetic pronunciation or romanization )
+- meaning  (Vietnamese )
 `,
     });
 
