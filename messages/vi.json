@@ -18,8 +18,7 @@
         "contribute": "Đóng góp"
     },
     "learn": {
-        "previous": "Trước đó",
-        "next": "Tiếp theo",
+        "loop": "Lặp lại",
         "cardProgress": "Thẻ {current} / {total}",
         "shuffle": "Trộn",
         "card": {
@@ -59,14 +58,13 @@
             "titlePlaceholder": "Nhập tiêu đề cho bộ sưu tập của bạn",
             "descriptionPlaceholder": "Nhập mô tả (tùy chọn)",
             "titlePlace ": "Tên Bộ Sưu Tập",
-            "copyPrompt": "Sao chép từ bộ sưu tập hiện có",
             "submitButton": "Lưu Bộ Sưu Tập",
             "pasteJsonHere": "Dán mảng JSON vào đây. Đảm bảo các khóa là \"word\", \"reading\" và \"meaning\".",
             "promptTemplate": {
                 "title": "AI Prompt Mẫu",
                 "subTitle": "Trợ giúp tạo prompt AI tùy chỉnh cho chủ đề và ngôn ngữ của bạn",
                 "copied": "Đã sao chép!",
-                "copy": "Sao chép Prompt",
+                "copy": "Copy Prompt",
                 "tips": "Mẹo: Dán điều này vào ChatGPT hoặc Gemini, sau đó sao chép kết quả vào tab JSON."
             }
         }

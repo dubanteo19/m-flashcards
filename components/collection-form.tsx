@@ -18,6 +18,9 @@ import { LanguageSelector } from "./filter/language-selector";
 import { PublicSelector } from "./filter/public-selector";
 import { AILoader } from "./loader";
 import PromptTemplate from "./prompt-tempate";
+import { Switch } from "./ui/switch";
+import { Label } from "./ui/label";
+import { useAutoResizeTextarea } from "@/hooks/use-auto-resize";
 
 interface CollectionFormProps {
     initialData?: Collection;
@@ -26,7 +29,8 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
     const { username } = useAuth();
     const t = useTranslations();
     const [title, setTitle] = useState(initialData?.title || "");
-    const [topic, setTopic] = useState("");
+    const [sourceText, setSourceText] = useState("");
+    const [isAIMode, setIsAIMode] = useState(false);
     const [isPublished, setIsPublished] = useState<boolean>(initialData?.is_published || true);
     const [desc, setDesc] = useState(initialData?.description || "");
     const [language, setLanguage] = useState(initialData?.language || LanguageCode.English);
@@ -34,6 +38,8 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
         initialData?.cards ? JSON.stringify(initialData.cards, null, 2) : ""
     );
     const { mutate: saveCollection, isPending } = useSaveCollection();
+    const { textareaRef, handleChange } =
+        useAutoResizeTextarea(setSourceText);
     const { mutateAsync: triggerAIGenerate, isPending: isAIPending } = useAIGenerate();
     const handleSubmit = async () => {
         if (!title || !jsonInput) return toast.error("Title and Cards are required");
@@ -68,9 +74,9 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
     };
 
     const handleAIGenerate = async () => {
-        if (!topic) return toast.error("Please enter a topic for AI generation");
+        if (!sourceText) return toast.error("Please enter a topic for AI generation");
         try {
-            const cards = await triggerAIGenerate({ topic, language });
+            const cards = await triggerAIGenerate({ sourceText, language });
             console.log("AI generated cards:", cards);
             setJsonInput(JSON.stringify(cards, null, 2));
         } catch (e) {
@@ -122,37 +128,56 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
                 </TabsList>
 
                 <TabsContent value="ai" className="space-y-4">
-                    <Input
-                        placeholder="Topic for AI-generated words (e.g. Food, Travel, Business)"
-                        value={topic}
-                        onChange={(e) => setTopic(e.target.value)}
+                    <Textarea
+                        placeholder="Topic, article, news, song lyrics, paragraph..."
+                        value={sourceText}
+                        maxLength={1000}
+                        rows={3}
+                        className="min-h-[80px] max-h-[300px] resize-y"
+                        ref={textareaRef}
+                        onChange={handleChange}
                     />
-                    <PromptTemplate lang={language} topic={topic} />
-                    <div className="text-xs bg-muted p-3 rounded-md flex items-start gap-2">
-                        <AlertCircle size={14} className="mt-0.5" />
-                        <span>{t("dashboard.form.pasteJsonHere")}</span>
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <Switch
+                                checked={isAIMode}
+                                onCheckedChange={setIsAIMode}
+                                id="ai-mode"
+                            />
+                            <Label htmlFor="ai-mode">AI Mode</Label>
+                        </div>
+                        {isAIMode &&
+                            <CooldownButton
+                                isFetching={isAIPending}
+                                variant={"default"}
+                                disabled={!sourceText}
+                                callback={handleAIGenerate}
+                                cooldownDuration={5000}
+                            >
+                                <Sparkles
+                                    size={18}
+                                    className="mr-2"
+                                />
+                                AI Generate
+                            </CooldownButton>
+                        }
                     </div>
 
-                    <CooldownButton
-                        isFetching={isAIPending}
-                        variant={"default"}
-                        disabled={!topic}
-                        callback={handleAIGenerate}
-                        cooldownDuration={5000}
-                    >
-                        <Sparkles
-                            size={18}
-                            className="mr-2"
-                        />
-                        AI Generate
-                    </CooldownButton>
 
+                    {!isAIMode &&
+                        <PromptTemplate lang={language} sourceText={sourceText} />
+                    }
                     <Textarea
                         className="h-[300px] font-mono text-sm"
                         placeholder='[{"word": "猫", "reading": "ねこ", "meaning": "Cat"}]'
                         value={jsonInput}
                         onChange={(e) => setJsonInput(e.target.value)}
                     />
+
+                    <div className="text-xs bg-muted p-3 rounded-md flex items-start gap-2">
+                        <AlertCircle size={14} className="mt-0.5" />
+                        <span>{t("dashboard.form.pasteJsonHere")}</span>
+                    </div>
                 </TabsContent>
 
                 <TabsContent value="manual" className="p-8 text-center border-2 border-dashed rounded-md">

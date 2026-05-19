@@ -3,15 +3,17 @@ import { Button } from "@/components/ui/button"; // Adjust based on your path
 import { Check, Copy, Info } from "lucide-react";
 import { Locale, useLocale, useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
+import { ChatGPTIcon } from "./icons/chatgpt";
+import { GeminiIcon } from "./icons/gimini-icon";
 
 
 interface PromptTemplateProps {
-    topic?: string;
+    sourceText?: string;
     lang?: LanguageCode;
 }
 
 export default function PromptTemplate({
-    topic = "[Your Topic]",
+    sourceText = "[Your Topic]",
     lang = LanguageCode.English
 }: PromptTemplateProps) {
     const [copied, setCopied] = useState(false);
@@ -30,7 +32,7 @@ export default function PromptTemplate({
     const languageName = getLanguageName(lang);
 
     // Updated template to use the dynamic languageName
-    const promptText = useMemo(() => buildPrompt(topic, languageName, locale), [topic, languageName, locale]);
+    const promptText = useMemo(() => buildPrompt(sourceText, languageName, locale), [sourceText, languageName, locale]);
 
     const handleCopy = () => {
         navigator.clipboard.writeText(promptText);
@@ -45,19 +47,43 @@ export default function PromptTemplate({
                     <Info size={16} />
                     {t("title")} ({languageName})
                 </div>
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleCopy}
-                    className="h-8 gap-2 text-xs"
-                >
-                    {copied ? <Check size={14} /> : <Copy size={14} />}
-                    {copied ? t("copied") : t("copy")}
-                </Button>
+                <div className="flex items-center gap-2">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={handleCopy}
+                        className="h-8 gap-2 text-xs"
+                    >
+                        {copied ? <Check size={14} /> : <Copy size={14} />}
+                        {copied ? t("copied") : t("copy")}
+                    </Button>
+                    <div className="flex items-center gap-2">
+                        <Button asChild variant="outline" size="sm" className="gap-2">
+                            <a
+                                href="https://chatgpt.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <ChatGPTIcon className="size-4" />
+                            </a>
+                        </Button>
+
+                        <Button asChild variant="outline" size="sm" className="gap-2">
+                            <a
+                                href="https://gemini.google.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <GeminiIcon className="size-4" />
+                            </a>
+                        </Button>
+                    </div>
+
+                </div>
             </div>
 
             <div className="relative">
-                <pre className="text-xs text-muted-foreground whitespace-pre-wrap font-mono leading-relaxed bg-background p-3 rounded border">
+                <pre className="text-xs break-all text-muted-foreground whitespace-pre-wrap font-mono leading-relaxed bg-background p-3 rounded border">
                     {promptText}
                 </pre>
             </div>
@@ -65,35 +91,88 @@ export default function PromptTemplate({
             <p className="text-[10px] text-muted-foreground italic text-center">
                 {t("tips")}
             </p>
+
         </div>
     );
 }
 
-function buildPrompt(
-    topic: string,
+export function buildPrompt(
+    sourceText: string,
     languageName: string,
     locale: Locale = "en"
 ) {
-    const templates: Record<Locale, string> = {
-        en: `Generate a JSON array of 15 ${languageName} vocabulary words about ${topic}.
+    const isLongContent = sourceText.trim().length > 120;
+    const templates: Record<Locale, { topic: string; content: string }> = {
+        en: {
+            topic: `Generate a JSON array of exactly 15 ${languageName}  vocabulary words about "${sourceText}".
 
 Each object must have these exact keys:
-- "word": The word in ${languageName} script
+- "word": The word or phrase in ${languageName} script
 - "reading": The phonetic pronunciation or romanization
 - "meaning": The English translation
 
-Return ONLY the raw JSON array. Do not include any markdown formatting like \`\`\`json or introductory text.`,
+Focus on useful and common vocabulary.
 
-        vi: `Tạo một mảng JSON gồm 15 từ vựng ${languageName} về chủ đề ${topic}.
+Return ONLY the raw JSON array.`,
+
+            content: `Analyze the following text and extract exactly 15 important or meaningful ${languageName} words or phrases.
+
+Focus on:
+- key vocabulary
+- meaningful expressions
+- useful phrases
+- important terms from the text
+
+Text:
+"""
+${sourceText}
+"""
+
+Each object must have these exact keys:
+- "word": The extracted word or phrase in ${languageName}
+- "reading": The phonetic pronunciation or romanization
+- "meaning": The English translation
+
+Return ONLY the raw JSON array.`
+        },
+
+        vi: {
+            topic: `Tạo một mảng JSON gồm chính xác 15 từ vựng ${languageName} (giản thể) về chủ đề "${sourceText}".
 
 Mỗi object phải có chính xác các key sau:
-- "word": Từ vựng bằng chữ ${languageName}
+- "word": Từ hoặc cụm từ bằng ${languageName}
 - "reading": Phiên âm hoặc romanization
 - "meaning": Nghĩa tiếng Việt
 
-Chỉ trả về mảng JSON thô. Không thêm markdown như \`\`\`json hoặc bất kỳ phần giới thiệu nào.`
+Ưu tiên các từ vựng phổ biến và hữu ích.
+
+Chỉ trả về mảng JSON thô.`,
+
+            content: `Phân tích đoạn văn dưới đây và trích xuất chính xác 15 từ hoặc cụm từ ${languageName} (giản thể) quan trọng và có ý nghĩa.
+
+Ưu tiên:
+- từ vựng quan trọng
+- cụm từ hữu ích
+- biểu đạt thường dùng
+- thuật ngữ nổi bật trong nội dung
+
+Nội dung:
+"""
+${sourceText}
+"""
+
+Mỗi object phải có chính xác các key sau:
+- "word": Từ hoặc cụm từ bằng ${languageName}
+- "reading": Phiên âm hoặc romanization
+- "meaning": Nghĩa tiếng Việt
+
+Chỉ trả về mảng JSON thô.`
+        }
     };
 
-    return templates[locale] || templates.en;
-}
+    const selected = templates[locale] || templates.en;
 
+    return isLongContent
+        ? selected.content
+        : selected.topic;
+}

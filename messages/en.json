@@ -18,8 +18,7 @@
         "contribute": "Contribute"
     },
     "learn": {
-        "previous": "Previous",
-        "next": "Next",
+        "loop": "loop",
         "cardProgress": "Card {current} of {total}",
         "shuffle": "Shuffle",
         "card": {

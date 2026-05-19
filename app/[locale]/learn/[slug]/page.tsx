@@ -2,7 +2,6 @@
 
 import { ROUTES } from "@/app/lib/constants";
 import { Card } from "@/app/lib/types";
-import EncouragementPopup from "@/components/encouragement-popup";
 import { Flag } from "@/components/flag-icon";
 import Flashcard from "@/components/flashcard";
 import FullPageLoader from "@/components/loader";
@@ -13,7 +12,7 @@ import { useCollectionBySlug } from "@/hooks/useColleciton";
 import { cn, shuffleArray } from "@/lib/utils";
 import { historyService } from "@/services/historyService";
 import { AnimatePresence, motion, PanInfo } from "framer-motion";
-import { ChevronLeft, ChevronRight, Shuffle } from "lucide-react";
+import { ArrowLeft, ArrowRight, RepeatIcon, Shuffle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { use, useCallback, useEffect, useState } from "react";
 
@@ -21,15 +20,26 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
     const { slug } = use(params);
     const t = useTranslations("learn");
     const { data: collection, isLoading } = useCollectionBySlug(slug);
+    const [isLoopMode, setIsLoopMode] = useState(false);
+    const [shouldShuffle, setShouldShuffle] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
     const [shuffledCards, setShuffledCards] = useState<Card[] | null>(null);
     const [[page, direction], setPage] = useState([0, 0]);
     const cards = shuffledCards || collection?.cards || [];
     const currentIndex = ((page % cards.length) + cards.length) % cards.length;
-    const handleShuffle = () => {
-        setShuffledCards(shuffleArray(cards));
+
+    //  Shuffle Logic
+    useEffect(() => {
+        if (!collection?.cards) return;
+
+        if (shouldShuffle) {
+            setShuffledCards(shuffleArray(collection.cards));
+        } else {
+            setShuffledCards(null);
+        }
+
         setPage([0, 0]);
-    };
+    }, [shouldShuffle, collection]);
     const paginate = useCallback((newDirection: number) => {
         setPage([page + newDirection, newDirection]);
     }, [page]);
@@ -44,6 +54,7 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [paginate]);
+
     // 2. Swipe Logic
     const swipeConfidenceThreshold = 10000;
     const swipePower = (offset: number, velocity: number) => {
@@ -59,6 +70,7 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
             paginate(-1);
         }
     };
+
     useEffect(() => {
         if (collection) {
             historyService.addToHistory(collection);
@@ -80,14 +92,25 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
                 language={collection.language} />
             <div className="mb-2">
                 <h2 className="text-center">{collection.title}</h2>
-                <p className="text-muted-foreground text-sm max-w-md  mx-auto my-2 italic">
+                <p className="text-muted-foreground text-sm max-w-md  mx-auto my-2 italic break-all">
                     {collection.description}
                 </p>
 
-                <p className="text-primary font-medium text-center">
-                    {t("cardProgress", { current: currentIndex + 1, total: cards.length })}
-                </p>
-
+                <div className=" flex-center gap-4 ">
+                    <p className="text-primary font-medium text-center">
+                        {t("cardProgress", { current: currentIndex + 1, total: cards.length })}
+                    </p>
+                    <ActionButton
+                        type="button"
+                        label={t("loop")}
+                        onClick={() => setIsLoopMode(prev => !prev)}
+                        size={"icon"}
+                        variant={isLoopMode ? "default" : "outline"}
+                        className=" rounded-full"
+                    >
+                        <RepeatIcon className="w-4" />
+                    </ActionButton>
+                </div>
             </div>
             <div className="relative shadow  w-full max-w-md lg:h-64  flex-center">
                 <AnimatePresence initial={false} custom={direction} mode="popLayout">
@@ -117,13 +140,20 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
 
             <div className="flex gap-4 mt-4 items-baseline">
                 <Button variant="outline" size="lg" onClick={() => paginate(-1)}>
-                    <ChevronLeft className="mr-2 size-4" /> {t("previous")}
+                    <ArrowLeft className="size-4" />
                 </Button>
-                <ActionButton label={t("shuffle")} size="sm" variant="destructive" className="mt-4" onClick={handleShuffle}>
-                    <Shuffle className="size-4" />
+                <ActionButton
+                    type="button"
+                    label={t("shuffle")}
+                    onClick={() => setShouldShuffle(prev => !prev)}
+                    size={"icon"}
+                    variant={shouldShuffle ? "destructive" : "outline"}
+                    className=" rounded-full"
+                >
+                    <Shuffle className="w-4" />
                 </ActionButton>
                 <Button size="lg" onClick={() => paginate(1)}>
-                    {t("next")} <ChevronRight className="ml-2 size-4" />
+                    <ArrowRight className="size-4" />
                 </Button>
 
             </div>

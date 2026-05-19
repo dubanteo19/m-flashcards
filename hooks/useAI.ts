@@ -1,16 +1,13 @@
 // hook
 import { LanguageCode } from "@/app/lib/enums";
+import { AIGenerateRequest } from "@/app/lib/request.type";
 import { generateAIContent } from "@/services/aiService";
 import { useMutation } from "@tanstack/react-query";
-type AIGenerateParams = {
-    topic: string;
-    language: LanguageCode;
-};
 export function useAIGenerate() {
     return useMutation({
         mutationFn: ({
-            topic,
+            sourceText,
             language,
-        }: AIGenerateParams) => generateAIContent(topic, language),
+        }: AIGenerateRequest) => generateAIContent(sourceText, language),
     });
 }

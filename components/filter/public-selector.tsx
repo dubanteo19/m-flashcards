@@ -26,8 +26,8 @@ export function PublicSelector({
                 <SelectValue placeholder="Public" />
             </SelectTrigger>
 
-            <SelectContent  position="popper">
-                <SelectItem className="" value="true">{t("public")}</SelectItem>
+            <SelectContent position="popper">
+                <SelectItem value="true">{t("public")}</SelectItem>
                 <SelectItem value="false">{t("private")}</SelectItem>
             </SelectContent>
         </Select>
