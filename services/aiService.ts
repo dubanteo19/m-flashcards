@@ -1,7 +1,6 @@
 // service
 export async function generateAIContent(
-    sourceText: string,
-    language: string
+    prompt: string,
 ) {
     const res = await fetch("/api/generate", {
         method: "POST",
@@ -9,8 +8,7 @@ export async function generateAIContent(
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            sourceText,
-            language,
+            prompt,
         }),
     });
 

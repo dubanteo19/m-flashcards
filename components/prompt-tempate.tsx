@@ -3,7 +3,7 @@ import { LanguageCode } from "@/app/lib/enums";
 import { Button } from "@/components/ui/button"; // Adjust based on your path
 import { Check, Copy, Info } from "lucide-react";
 import { Locale, useLocale, useTranslations } from "next-intl";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ChatGPTIcon } from "./icons/chatgpt";
 import { GeminiIcon } from "./icons/gimini-icon";
 
@@ -11,12 +11,14 @@ interface PromptTemplateProps {
     sourceText?: string;
     lang?: LanguageCode;
     wordCount?: number;
+    onPromptChange: (prompt: string) => void;
 }
 
 export default function PromptTemplate({
     sourceText = "You source text:",
     lang = LanguageCode.English,
-    wordCount = 15
+    wordCount = 15,
+    onPromptChange
 }: PromptTemplateProps) {
     const [copied, setCopied] = useState(false);
     const [hasCopied, setHasCopied] = useState(false);
@@ -33,9 +35,12 @@ export default function PromptTemplate({
     };
 
     const languageName = getLanguageName(lang);
-
     // Updated template to use the dynamic languageName
     const promptText = useMemo(() => buildPrompt(sourceText, languageName, locale, wordCount), [sourceText, languageName, locale, wordCount]);
+
+    useEffect(() => {
+        onPromptChange(promptText);
+    }, [promptText, onPromptChange]);
 
     const handleCopy = () => {
         setHasCopied(true);
@@ -51,7 +56,7 @@ export default function PromptTemplate({
                     <Info size={16} />
                     {t("title")} ({languageName}) |
 
-                    
+
                 </div>
                 <div className="flex items-center gap-2">
                     <Button

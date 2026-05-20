@@ -1,11 +1,7 @@
 import { AIGenerateRequest } from "@/app/lib/request.type";
-import { buildPrompt } from "@/components/prompt-tempate";
 import { google } from "@ai-sdk/google";
 import { generateText, Output } from "ai";
 import { z } from "zod";
-
-
-type Locale = "en" | "vi";
 
 const vocabItem = z.object({
     word: z.string().max(20),
@@ -15,8 +11,7 @@ const vocabItem = z.object({
 
 export async function POST(req: Request) {
     const {
-        sourceText,
-        language,
+        prompt,
     }: AIGenerateRequest = await req.json();
 
     const { output } = await generateText({
@@ -24,7 +19,7 @@ export async function POST(req: Request) {
         output: Output.array({
             element: vocabItem,
         }),
-        prompt: buildPrompt(sourceText, language),
+        prompt
     });
 
     return Response.json(output);

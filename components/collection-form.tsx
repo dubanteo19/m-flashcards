@@ -30,6 +30,7 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
     const t = useTranslations();
     const [title, setTitle] = useState(initialData?.title || "");
     const [sourceText, setSourceText] = useState("");
+    const [prompt, setPrompt] = useState("");
     const [isAIMode, setIsAIMode] = useState(false);
     const [wordCount, setWordCount] = useState(15);
     const [isPublished, setIsPublished] = useState<boolean>(initialData?.is_published || true);
@@ -77,8 +78,7 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
     const handleAIGenerate = async () => {
         if (!sourceText) return toast.error("Please enter a topic for AI generation");
         try {
-            const cards = await triggerAIGenerate({ sourceText, language });
-            console.log("AI generated cards:", cards);
+            const cards = await triggerAIGenerate({ prompt });
             setJsonInput(JSON.stringify(cards, null, 2));
         } catch (e) {
             toast.error("AI generation failed. Please try again.");
@@ -181,10 +181,10 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
 
 
                     {shouldShowPromptTemplate &&
-                        <PromptTemplate lang={language} sourceText={sourceText} wordCount={wordCount} />
+                        <PromptTemplate onPromptChange={setPrompt} lang={language} sourceText={sourceText} wordCount={wordCount} />
                     }
                     <Textarea
-                        className="h-[300px] font-mono text-sm"
+                        className="h-[300px] text-sm"
                         placeholder='[{"word": "猫", "reading": "ねこ", "meaning": "Cat"}]'
                         value={jsonInput}
                         onChange={(e) => setJsonInput(e.target.value)}
