@@ -31,6 +31,7 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
     const [title, setTitle] = useState(initialData?.title || "");
     const [sourceText, setSourceText] = useState("");
     const [isAIMode, setIsAIMode] = useState(false);
+    const [wordCount, setWordCount] = useState(15);
     const [isPublished, setIsPublished] = useState<boolean>(initialData?.is_published || true);
     const [desc, setDesc] = useState(initialData?.description || "");
     const [language, setLanguage] = useState(initialData?.language || LanguageCode.English);
@@ -84,6 +85,8 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
             console.error(e);
         }
     };
+    const shouldShowPromptTemplate = !isAIMode && sourceText;
+
     if (isAIPending) {
         return (<AILoader />);
     }
@@ -137,7 +140,7 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
                         ref={textareaRef}
                         onChange={handleChange}
                     />
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
                         <div className="flex items-center gap-2">
                             <Switch
                                 checked={isAIMode}
@@ -146,9 +149,22 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
                             />
                             <Label htmlFor="ai-mode">AI Mode</Label>
                         </div>
+                        <div className="flex items-center gap-2">
+                            <Label className="text-xs text-muted-foreground ml-2" htmlFor="wordCount">Số từ:</Label>
+                            <Input
+                                type="number"
+                                id="wordCount"
+                                min={10}
+                                max={80}
+                                value={wordCount}
+                                onChange={(e) => setWordCount(Number(e.target.value))}
+                                className="w-16 h-7 px-2 py-0 text-xs text-muted-foreground"
+                            />
+                        </div>
                         {isAIMode &&
                             <CooldownButton
                                 isFetching={isAIPending}
+                                size={"sm"}
                                 variant={"default"}
                                 disabled={!sourceText}
                                 callback={handleAIGenerate}
@@ -164,8 +180,8 @@ export default function CollectionForm({ initialData }: CollectionFormProps) {
                     </div>
 
 
-                    {!isAIMode &&
-                        <PromptTemplate lang={language} sourceText={sourceText} />
+                    {shouldShowPromptTemplate &&
+                        <PromptTemplate lang={language} sourceText={sourceText} wordCount={wordCount} />
                     }
                     <Textarea
                         className="h-[300px] font-mono text-sm"

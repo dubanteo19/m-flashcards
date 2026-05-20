@@ -60,7 +60,7 @@ export default function Flashcard({ card, language }: FlashcardProps) {
                 <Card className="absolute inset-0 backface-hidden flex flex-col items-center justify-center p-6 shadow-xl">
                     <span className="text-sm text-muted-foreground mb-2">{t("front")}</span>
                     <div className="relative inline-block">
-                        <h2 className="text-5xl tracking-tighter">
+                        <h2 className="text-5xl tracking-tighter break-all">
                             {card.word}
                         </h2>
 

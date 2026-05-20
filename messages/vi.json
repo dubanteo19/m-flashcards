@@ -63,7 +63,7 @@
             "promptTemplate": {
                 "title": "AI Prompt Mẫu",
                 "subTitle": "Trợ giúp tạo prompt AI tùy chỉnh cho chủ đề và ngôn ngữ của bạn",
-                "copied": "Đã sao chép!",
+                "copied": "Đã copy!",
                 "copy": "Copy Prompt",
                 "tips": "Mẹo: Dán điều này vào ChatGPT hoặc Gemini, sau đó sao chép kết quả vào tab JSON."
             }
