@@ -7,10 +7,10 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname
   },
-  // experimental: {
-  //   workerThreads: false,
-  //   cpus: 1
-  // },
+  experimental: {
+    workerThreads: false,
+    cpus: 1
+  },
   allowedDevOrigins: ['192.168.100.38'],
 };
 
