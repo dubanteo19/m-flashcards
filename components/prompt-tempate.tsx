@@ -117,6 +117,10 @@ export function buildPrompt(
     wordCount: number = 15
 ) {
     const isLongContent = sourceText.trim().length > 120;
+    const languageModifier =
+        languageName === "Chinese"
+            ? " (giản thể)"
+            : "";
     const templates: Record<Locale, { topic: string; content: string }> = {
         en: {
             topic: `Generate a JSON array of maximum ${wordCount} ${languageName}  vocabulary words about "${sourceText}".
@@ -152,7 +156,7 @@ Return ONLY the raw JSON array.`
         },
 
         vi: {
-            topic: `Tạo một mảng JSON gồm tối đa ${wordCount} từ vựng ${languageName} (giản thể) về chủ đề "${sourceText}".
+            topic: `Tạo một mảng JSON gồm tối đa ${wordCount} từ vựng ${languageName} ${languageModifier} về chủ đề "${sourceText}".
 
 Mỗi object phải có chính xác các key sau:
 - "word": Từ hoặc cụm từ bằng ${languageName}

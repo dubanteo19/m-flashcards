@@ -28,7 +28,7 @@ export function useSaveCollection() {
         mutationFn: ({ username, data }: { username: string, data: any }) =>
             collectionService.saveCollection(username, data),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["collections"] });
+            queryClient.invalidateQueries({ queryKey: ["user-collections"] });
         },
     });
 }
@@ -39,7 +39,7 @@ export function useDeleteCollection() {
         mutationFn: (slug: string) =>
             collectionService.deleteCollection(slug),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["collections"] });
+            queryClient.invalidateQueries({ queryKey: ["user-collections"] });
         },
     });
 }

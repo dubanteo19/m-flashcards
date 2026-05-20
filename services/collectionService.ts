@@ -1,7 +1,20 @@
 import { supabase } from "@/app/lib/supabase";
 import { CollectionFilters, RawCollectionResponse } from "@/app/lib/types";
 import { toCollection } from "@/lib/utils";
-
+type CollectionPayload = {
+    id?: string;
+    slug?: string;
+    language: string;
+    title: string;
+    description: string;
+    is_published: boolean;
+    cards: {
+        id?: string;
+        word: string;
+        reading: string;
+        meaning: string;
+    }[];
+};
 export const collectionService = {
     async getByUsername(username: string) {
         const { data, error } = await supabase
@@ -39,18 +52,14 @@ export const collectionService = {
         if (error) throw error;
         return data;
     },
-    async saveCollection(
-        username: string,
-        data: {
-            id?: string;
-            slug?: string;
-            language: string;
-            title: string;
-            description: string;
-            is_published: boolean;
-            cards: { word: string; reading: string; meaning: string }[];
+    async saveCollection(username: string, data: CollectionPayload) {
+        if (data.id) {
+            return this.updateCollection(username, data);
         }
-    ) {
+
+        return this.createCollection(username, data);
+    },
+    async createCollection(username: string, data: CollectionPayload) {
         // 1. Generate the URL-friendly slug
         const slug = data.slug ||
             `${data.title.toLowerCase().trim().replace(/\s+/g, "-")}-${Math.floor(1000 + Math.random() * 9000)}`;
@@ -90,6 +99,73 @@ export const collectionService = {
 
         // Return the slug so the frontend can redirect to the correct URL
         return slug;
+    },
+
+    async updateCollection(
+        username: string,
+        data: CollectionPayload
+    ) {
+        if (!data.id) throw new Error("Collection id is required");
+
+        const { error: collectionError } = await supabase
+            .from("collections")
+            .update({
+                title: data.title,
+                slug: data.slug,
+                language: data.language,
+                description: data.description,
+                author_username: username,
+                is_published: data.is_published,
+            })
+            .eq("id", data.id);
+
+        if (collectionError) throw collectionError;
+
+        const { data: existingCards, error: fetchError } =
+            await supabase
+                .from("cards")
+                .select("id")
+                .eq("collection_id", data.id);
+
+        if (fetchError) throw fetchError;
+
+        const incomingIds = new Set(
+            data.cards
+                .filter((c) => c.id)
+                .map((c) => c.id)
+        );
+
+        const toDelete = existingCards
+            .filter((c) => !incomingIds.has(c.id))
+            .map((c) => c.id);
+
+        if (toDelete.length) {
+            const { error } = await supabase
+                .from("cards")
+                .delete()
+                .in("id", toDelete);
+
+            if (error) throw error;
+        }
+
+        const cardsToUpsert = data.cards.map(
+            (card, index) => ({
+                id: card.id,
+                collection_id: data.id,
+                word: card.word,
+                reading: card.reading,
+                meaning: card.meaning,
+                order_index: index,
+            })
+        );
+
+        const { error: cardError } = await supabase
+            .from("cards")
+            .upsert(cardsToUpsert);
+
+        if (cardError) throw cardError;
+
+        return data.slug;
     },
     async deleteCollection(slug: string) {
         const decodedSlug = decodeURIComponent(slug);

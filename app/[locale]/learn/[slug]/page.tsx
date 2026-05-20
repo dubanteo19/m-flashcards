@@ -1,9 +1,9 @@
 "use client";
 
 import { ROUTES } from "@/app/lib/constants";
-import { Card } from "@/app/lib/types";
 import { Flag } from "@/components/flag-icon";
 import Flashcard from "@/components/flashcard";
+import { LearnDone } from "@/components/learn-done";
 import FullPageLoader from "@/components/loader";
 import { ActionButton } from "@/components/ui/action-button";
 import { Button } from "@/components/ui/button";
@@ -14,35 +14,44 @@ import { historyService } from "@/services/historyService";
 import { AnimatePresence, motion, PanInfo } from "framer-motion";
 import { ArrowLeft, ArrowRight, RepeatIcon, Shuffle } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { use, useCallback, useEffect, useState } from "react";
+import { use, useCallback, useEffect, useMemo, useState } from "react";
 
 export default function LearnPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = use(params);
     const t = useTranslations("learn");
     const { data: collection, isLoading } = useCollectionBySlug(slug);
     const [isLoopMode, setIsLoopMode] = useState(false);
+    const [isCompleted, setIsCompleted] = useState(false);
     const [shouldShuffle, setShouldShuffle] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
-    const [shuffledCards, setShuffledCards] = useState<Card[] | null>(null);
     const [[page, direction], setPage] = useState([0, 0]);
-    const cards = shuffledCards || collection?.cards || [];
+    const cards = useMemo(() => {
+        const sourceCards = collection?.cards ?? [];
+        return shouldShuffle
+            ? shuffleArray(sourceCards)
+            : sourceCards;
+    }, [collection?.cards, shouldShuffle]);
+
     const currentIndex = ((page % cards.length) + cards.length) % cards.length;
+    const paginate = useCallback((newDirection: number) => {
+        const nextPage = page + newDirection;
 
-    //  Shuffle Logic
-    useEffect(() => {
-        if (!collection?.cards) return;
-
-        if (shouldShuffle) {
-            setShuffledCards(shuffleArray(collection.cards));
-        } else {
-            setShuffledCards(null);
+        if (!isLoopMode) {
+            if (nextPage < 0) {
+                setPage([0, 0]);
+                return;
+            }
+            if (nextPage === cards.length - 1) {
+                setIsCompleted(true);
+            }
+            if (nextPage >= cards.length) {
+                setPage([cards.length - 1, 0]);
+                return;
+            }
         }
 
-        setPage([0, 0]);
-    }, [shouldShuffle, collection]);
-    const paginate = useCallback((newDirection: number) => {
-        setPage([page + newDirection, newDirection]);
-    }, [page]);
+        setPage([nextPage, newDirection]);
+    }, [page, isLoopMode, cards.length]);
 
     // 1. Keyboard Navigation Logic
     useEffect(() => {
@@ -86,7 +95,8 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
     )
 
     return (
-        <div className="flex-1 bg-slate-50 flex justify-center items-center flex-col  p-4 overflow-hidden">
+        <div
+            className="flex-1 bg-slate-50 flex justify-center items-center flex-col  p-4 overflow-hidden">
             <Flag
                 size="md"
                 language={collection.language} />
@@ -96,23 +106,15 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
                     {collection.description}
                 </p>
 
-                <div className=" flex-center gap-4 ">
-                    <p className="text-primary font-medium text-center">
-                        {t("cardProgress", { current: currentIndex + 1, total: cards.length })}
-                    </p>
-                    <ActionButton
-                        type="button"
-                        label={t("loop")}
-                        onClick={() => setIsLoopMode(prev => !prev)}
-                        size={"icon"}
-                        variant={isLoopMode ? "default" : "outline"}
-                        className=" rounded-full"
-                    >
-                        <RepeatIcon className="w-4" />
-                    </ActionButton>
-                </div>
+                <p className="text-primary font-medium text-center">
+                    {t("cardProgress", { current: currentIndex + 1, total: cards.length })}
+                </p>
+
+
+
             </div>
-            <div className="relative shadow  w-full max-w-md lg:h-64  flex-center">
+            <div
+                className="relative shadow w-full max-w-md lg:h-64  flex-center">
                 <AnimatePresence initial={false} custom={direction} mode="popLayout">
                     <motion.div
                         key={page}
@@ -142,21 +144,40 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
                 <Button variant="outline" size="lg" onClick={() => paginate(-1)}>
                     <ArrowLeft className="size-4" />
                 </Button>
+
+                <Button size="lg" onClick={() => paginate(1)}>
+                    <ArrowRight className="size-4" />
+                </Button>
+
+            </div>
+            <div className=" flex-center gap-2 mt-2">
+                <ActionButton
+                    type="button"
+                    label={t("loop")}
+                    onClick={() => setIsLoopMode(prev => !prev)}
+                    size={"icon"}
+                    variant={isLoopMode ? "default" : "outline"}
+                    className=" rounded-full"
+                >
+                    <RepeatIcon className="w-4" />
+                </ActionButton>
                 <ActionButton
                     type="button"
                     label={t("shuffle")}
-                    onClick={() => setShouldShuffle(prev => !prev)}
+                    onClick={() => {
+                        setShouldShuffle(prev => !prev)
+                        setPage([0, 0]);
+                    }}
                     size={"icon"}
                     variant={shouldShuffle ? "destructive" : "outline"}
                     className=" rounded-full"
                 >
                     <Shuffle className="w-4" />
                 </ActionButton>
-                <Button size="lg" onClick={() => paginate(1)}>
-                    <ArrowRight className="size-4" />
-                </Button>
-
             </div>
+            {isCompleted && (
+                <LearnDone isCompleted={isCompleted} setIsCompleted={setIsCompleted} title={collection.title} />
+            )}
         </div >
     );
 }

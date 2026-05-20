@@ -6,10 +6,13 @@ import FullPageLoader from "@/components/loader";
 import { useCollectionBySlug } from "@/hooks/useColleciton";
 import { useTranslations } from "next-intl";
 import { use } from "react";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/app/lib/constants";
 
 export default function EditCollectionPage({ params }: { params: Promise<{ slug: string }> }) {
+    const router = useRouter();
     const resolvedParams = use(params);
-    const t = useTranslations("dashboard.form");
+    const t = useTranslations("dashboard.form")
     const slug = resolvedParams.slug;
     const { data: initialData, isLoading } = useCollectionBySlug(slug)
     if (isLoading) return <FullPageLoader />
@@ -28,6 +31,9 @@ export default function EditCollectionPage({ params }: { params: Promise<{ slug:
             <div className="bg-card border rounded-xl p-6 shadow-sm">
                 <CollectionForm
                     initialData={initialData || undefined}
+                    onSuccess={() => {
+                        router.push(ROUTES.DASHBOARD);
+                    }}
                 />
             </div>
         </div>
