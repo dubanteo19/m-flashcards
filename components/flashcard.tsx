@@ -83,8 +83,8 @@ export default function Flashcard({ card, language }: FlashcardProps) {
                     style={{ transform: "rotateY(180deg)" }}
                 >
                     <span className="text-sm opacity-70 mb-2">{t("meaning")}</span>
-                    <h3 className="mb-1">{card.reading}</h3>
-                    <p className="text-3xl font-bold">{card.meaning}</p>
+                    <h2 className="mb-1">{card.reading}</h2>
+                    <h3 >{card.meaning}</h3>
                 </Card>
             </motion.div>
         </div>
