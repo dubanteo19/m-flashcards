@@ -1,4 +1,4 @@
-import { Collection, RawCollectionResponse } from "@/app/lib/types";
+import { Collection, RawCollectionResponse } from "@/app/lib/types/cards";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 

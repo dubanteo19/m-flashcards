@@ -1,16 +1,15 @@
 "use client";
 
-import { ROUTES } from "@/app/lib/constants";
 import { Flag } from "@/components/flag-icon";
 import Flashcard from "@/components/flashcard";
 import { LearnDone } from "@/components/learn-done";
 import FullPageLoader from "@/components/loader";
+import { CollectionNotFound } from "@/components/not-found/collection-not-found";
 import { ActionButton } from "@/components/ui/action-button";
 import { Button } from "@/components/ui/button";
-import { LinkButton } from "@/components/ui/link-button";
 import { useCollectionBySlug } from "@/hooks/useColleciton";
 import { cn, shuffleArray } from "@/lib/utils";
-import { historyService } from "@/services/historyService";
+import { historyService } from "@/services/history.service";
 import { AnimatePresence, motion, PanInfo } from "framer-motion";
 import { ArrowLeft, ArrowRight, RepeatIcon, Shuffle } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -87,20 +86,15 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
     }, [collection]);
 
     if (isLoading) return <FullPageLoader />
-    if (!collection || cards.length === 0) return (
-        <div className="min-h-screen flex-center flex-col ">
-            <p className="mb-4">No cards found in this collection.</p>
-            <LinkButton href={ROUTES.DASHBOARD}>Back to Library</LinkButton>
-        </div>
-    )
+    if (!collection) return (<CollectionNotFound />)
 
     return (
         <div
-            className="flex-1 bg-slate-50 flex justify-center items-center flex-col  p-4 overflow-hidden">
+            className="flex-1  bg-slate-50 flex justify-center items-center flex-col  p-4 overflow-hidden">
             <Flag
                 size="md"
                 language={collection.language} />
-            <div className="mb-2">
+            <div className="mb-2 max-w-xl mx-auto">
                 <h2 className="text-center">{collection.title}</h2>
                 <p className="text-muted-foreground text-sm max-w-md  mx-auto my-2 italic break-all">
                     {collection.description}
@@ -176,7 +170,7 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
                 </ActionButton>
             </div>
             {isCompleted && (
-                <LearnDone isCompleted={isCompleted} setIsCompleted={setIsCompleted} title={collection.title} />
+                <LearnDone slug={slug} setIsCompleted={setIsCompleted} title={collection.title} />
             )}
         </div >
     );

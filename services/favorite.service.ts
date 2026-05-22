@@ -1,4 +1,4 @@
-import { Collection } from "@/app/lib/types";
+import { Collection } from "@/app/lib/types/cards";
 import { db } from "@/lib/db";
 
 export const favoritesService = {

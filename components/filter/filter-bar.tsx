@@ -1,6 +1,6 @@
 "use client";
 
-import { CollectionFilters } from "@/app/lib/types";
+import { CollectionFilters } from "@/app/lib/types/cards";
 import { LanguageSelector } from "./language-selector";
 
 interface Props {

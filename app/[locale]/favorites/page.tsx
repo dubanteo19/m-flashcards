@@ -3,7 +3,7 @@ import { CollectionCard } from "@/components/collection-card";
 import { EmptyState } from "@/components/empty-state";
 import FullPageLoader from "@/components/loader";
 import { db } from "@/lib/db";
-import { favoritesService } from "@/services/favoriteService";
+import { favoritesService } from "@/services/favorite.service";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useTranslations } from "next-intl";
 export default function FavoritesPage() {

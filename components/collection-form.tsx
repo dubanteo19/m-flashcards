@@ -1,6 +1,6 @@
 "use client";
 import { LanguageCode } from "@/app/lib/enums";
-import { Collection } from "@/app/lib/types";
+import { Collection } from "@/app/lib/types/cards";
 import { CollectionFormValues, collectionSchema } from "@/app/lib/validations/collection";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

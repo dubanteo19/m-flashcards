@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { collectionService } from "@/services/collectionService";
-import { Collection, CollectionFilters } from "@/app/lib/types";
+import { collectionService } from "@/services/collection.service";
+import { Collection, CollectionFilters } from "@/app/lib/types/cards";
 
 export function useCollections(filters: CollectionFilters) {
     return useQuery({

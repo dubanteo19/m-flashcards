@@ -1,4 +1,4 @@
-import { LanguageCode } from "./enums";
+import { LanguageCode } from "@/app/lib/enums";
 
 export interface Card {
     id: string; // UUID from Supabase

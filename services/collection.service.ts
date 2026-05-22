@@ -1,5 +1,6 @@
 import { supabase } from "@/app/lib/supabase";
-import { CollectionFilters, RawCollectionResponse } from "@/app/lib/types";
+import { CollectionFilters, RawCollectionResponse } from "@/app/lib/types/cards";
+import GithubSlugger from "github-slugger";
 import { toCollection } from "@/lib/utils";
 type CollectionPayload = {
     id?: string;
@@ -61,8 +62,10 @@ export const collectionService = {
     },
     async createCollection(username: string, data: CollectionPayload) {
         // 1. Generate the URL-friendly slug
-        const slug = data.slug ||
-            `${data.title.toLowerCase().trim().replace(/\s+/g, "-")}-${Math.floor(1000 + Math.random() * 9000)}`;
+        const slugger = new GithubSlugger();
+        const slug =
+            data.slug ||
+            `${slugger.slug(data.title)}-${Math.floor(1000 + Math.random() * 9000)}`;
 
         // 2. Upsert the collection and SELECT the returned ID (UUID)
         const { data: collectionRow, error: colError } = await supabase

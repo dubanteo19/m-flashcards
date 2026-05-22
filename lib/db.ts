@@ -1,4 +1,4 @@
-import { Collection } from '@/app/lib/types';
+import { Collection } from '@/app/lib/types/cards';
 import Dexie, { type EntityTable } from 'dexie';
 
 

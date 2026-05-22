@@ -1,15 +1,15 @@
 "use client";
 
 import { LanguageCode } from "@/app/lib/enums";
-import { CollectionFilters } from "@/app/lib/types";
+import { CollectionFilters } from "@/app/lib/types/cards";
 import { FilterBar } from "@/components/filter/filter-bar";
 import FullPageLoader from "@/components/loader";
 import { useCollections } from "@/hooks/useColleciton";
+import { RefreshCcwIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CooldownButton } from "./buttons/cooldown-button";
 import { ExploreListFacade } from "./explore-list-facade";
-import { RefreshCcw, RefreshCcwIcon } from "lucide-react";
 
 export default function HomePageContent() {
     const router = useRouter();

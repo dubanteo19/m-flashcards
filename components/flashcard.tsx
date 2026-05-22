@@ -1,5 +1,5 @@
 "use client";
-import { FlashcardView } from "@/app/lib/types";
+import { FlashcardView } from "@/app/lib/types/cards";
 import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { AudioLinesIcon } from "lucide-react";
@@ -50,6 +50,15 @@ export default function Flashcard({ card, language }: FlashcardProps) {
             className="relative w-full max-w-md h-64 cursor-pointer perspective-1000"
             onClick={() => setIsFlipped(!isFlipped)}
         >
+
+            <Button
+                onClick={handlePlaySound}
+                size="icon"
+                className="absolute -top-3 -right-3 rounded-full z-10"
+                variant="destructive"
+            >
+                <AudioLinesIcon className="size-4" />
+            </Button>
             <motion.div
                 className="w-full h-full relative preserve-3d"
                 initial={false}
@@ -59,21 +68,12 @@ export default function Flashcard({ card, language }: FlashcardProps) {
                 {/* Front Side */}
                 <Card className="absolute inset-0 backface-hidden flex flex-col items-center justify-center p-6 shadow-xl">
                     <span className="text-sm text-muted-foreground mb-2">{t("front")}</span>
-                    <div className="relative inline-block">
-                        <h2 className="text-5xl tracking-tighter break-all">
+                    <div className=" inline-block">
+                        <h2 className="text-5xl tracking-tighter break-word text-center">
                             {card.word}
                         </h2>
 
-                        <Button
-                            onClick={handlePlaySound}
-                            size="icon"
-                            className="absolute -top-3 -right-10 rounded-full"
-                            variant="destructive"
-                        >
-                            <AudioLinesIcon className="size-4" />
-                        </Button>
                     </div>
-
                     <p className="mt-4 text-muted-foreground italic">{t("clickToFlip")}</p>
                 </Card>
 
