@@ -8,7 +8,7 @@ import { CollectionNotFound } from "@/components/not-found/collection-not-found"
 import { ActionButton } from "@/components/ui/action-button";
 import { Button } from "@/components/ui/button";
 import { useCollectionBySlug } from "@/hooks/useColleciton";
-import { cn, shuffleArray } from "@/lib/utils";
+import { cn, shuffleArray } from "@/app/lib/utils";
 import { historyService } from "@/services/history.service";
 import { AnimatePresence, motion, PanInfo } from "framer-motion";
 import { ArrowLeft, ArrowRight, RepeatIcon, Shuffle } from "lucide-react";

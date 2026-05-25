@@ -6,6 +6,7 @@ import { Locale, useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import { ChatGPTIcon } from "./icons/chatgpt";
 import { GeminiIcon } from "./icons/gimini-icon";
+import { cn } from "@/app/lib/utils";
 
 interface PromptTemplateProps {
     sourceText?: string;
@@ -55,15 +56,14 @@ export default function PromptTemplate({
                 <div className="flex items-center gap-2 text-sm font-medium text-primary">
                     <Info size={16} />
                     {t("title")} ({languageName}) |
-
-
                 </div>
                 <div className="flex items-center gap-2">
                     <Button
                         variant="ghost"
                         size="sm"
+                        type="button"
                         onClick={handleCopy}
-                        className="h-8 gap-2 text-xs"
+                        className={cn("h-8 gap-2 text-xs", !hasCopied && "animate-pulse-outward")}
                     >
                         {copied ? <Check size={14} /> : <Copy size={14} />}
                         {copied ? t("copied") : t("copy")}
@@ -71,7 +71,8 @@ export default function PromptTemplate({
                     {
                         hasCopied && (
                             <div className="flex items-center gap-2">
-                                <Button asChild variant="outline" size="sm" className="gap-2">
+                                <Button asChild variant="outline" size="sm"
+                                    className="gap-2 transition-all hover:scale-105 active:scale-95 border-emerald-500/30 hover:border-emerald-500 animate-pulse-outward">
                                     <a
                                         href="https://chatgpt.com"
                                         target="_blank"
@@ -80,7 +81,9 @@ export default function PromptTemplate({
                                         <ChatGPTIcon className="size-4" />
                                     </a>
                                 </Button>
-                                <Button asChild variant="outline" size="sm" className="gap-2">
+                                <Button asChild variant="outline" size="sm"
+                                    className="gap-2 transition-all hover:scale-105 active:scale-95 border-blue-500/30 hover:border-blue-500 animate-pulse-outward [animation-delay:200ms]"
+                                >
                                     <a
                                         href="https://gemini.google.com"
                                         target="_blank"

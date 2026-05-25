@@ -1,7 +1,7 @@
 import { Providers } from "@/app/providers/providers";
 import Footer from "@/components/layout/footer";
 import Header from "@/components/layout/header";
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/lib/utils";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";

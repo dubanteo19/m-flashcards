@@ -1,3 +1,4 @@
+import { GlobeIcon, User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import {
     Select,
@@ -27,8 +28,18 @@ export function PublicSelector({
             </SelectTrigger>
 
             <SelectContent position="popper">
-                <SelectItem value="true">{t("public")}</SelectItem>
-                <SelectItem value="false">{t("private")}</SelectItem>
+                <SelectItem value="true">
+                    <div className="flex items-center">
+                        <GlobeIcon className="mr-2" />
+                        {t("public")}
+                    </div>
+                </SelectItem>
+                <SelectItem value="false">
+                    <div className="flex items-center">
+                        <User className="mr-2" />
+                        {t("private")}
+                    </div>
+                </SelectItem>
             </SelectContent>
         </Select>
     );

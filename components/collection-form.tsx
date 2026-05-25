@@ -21,8 +21,11 @@ import { LanguageSelector } from "./filter/language-selector";
 import { PublicSelector } from "./filter/public-selector";
 import { AILoader } from "./loader";
 import PromptTemplate from "./prompt-tempate";
+import { AnimatedInput } from "./ui/animated-input";
 import { Field, FieldError, FieldLabel } from "./ui/field";
 import { Switch } from "./ui/switch";
+import { JSON_PLACEHOLDER } from "@/app/lib/constants";
+import { detectLanguage } from "@/app/lib/utils";
 
 interface CollectionFormProps {
   initialData?: Collection;
@@ -35,6 +38,7 @@ export default function CollectionForm({
   const { username } = useAuth();
   const t = useTranslations();
   const isCreating = !initialData;
+  const [showLanguageSuggestion, setShowLanguageSuggestion] = useState(false);
   const [language, setLanguage] = useState(
     initialData?.language || LanguageCode.English,
   );
@@ -58,9 +62,16 @@ export default function CollectionForm({
   const isAIMode = form.watch("isAIMode");
   const wordCount = form.watch("wordCount");
 
-  const { textareaRef, handleChange } = useAutoResizeTextarea((value) =>
+  const { handleChange } = useAutoResizeTextarea((value) =>
     form.setValue("sourceText", value),
   );
+  const handleBlur = () => {
+    const sourceTextValue = form.getValues("sourceText");
+    const detectedLanguage = detectLanguage(sourceTextValue);
+    if (detectedLanguage && detectedLanguage !== language) {
+      setShowLanguageSuggestion(true);
+    }
+  };
   const { mutateAsync: triggerAIGenerate, isPending: isAIPending } =
     useAIGenerate();
   const handleSubmit = async (data: CollectionFormValues) => {
@@ -71,7 +82,6 @@ export default function CollectionForm({
 
     try {
       const cards = JSON.parse(data.jsonInput);
-
       saveCollection(
         {
           username,
@@ -134,6 +144,12 @@ export default function CollectionForm({
             <label className="text-sm font-medium">
               {t("common.language")}
             </label>
+
+            {showLanguageSuggestion &&
+              <div>
+                <span className="text-sm text-muted-foreground">Thay đổi ngôn ngữ?</span>
+              </div>
+            }
             <LanguageSelector
               selected={language}
               onSelect={setLanguage}
@@ -193,16 +209,10 @@ export default function CollectionForm({
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <Textarea
-                    {...field}
-                    ref={textareaRef}
-                    placeholder="Topic, article, news..."
-                    maxLength={1000}
-                    rows={3}
-                    className="min-h-[80px] max-h-[300px] resize-y"
-                    onChange={(e) => {
-                      handleChange(e);
-                    }}
+                  <AnimatedInput
+                    field={field}
+                    handleChange={handleChange}
+                    onBlur={handleBlur}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -288,7 +298,11 @@ export default function CollectionForm({
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <Textarea {...field} className="h-[300px] text-sm" />
+                <Textarea
+                  placeholder={JSON_PLACEHOLDER}
+                  {...field}
+                  className="h-[300px] text-sm"
+                />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}

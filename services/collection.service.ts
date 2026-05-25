@@ -1,7 +1,7 @@
 import { supabase } from "@/app/lib/supabase";
 import { CollectionFilters, RawCollectionResponse } from "@/app/lib/types/cards";
 import GithubSlugger from "github-slugger";
-import { toCollection } from "@/lib/utils";
+import { toCollection } from "@/app/lib/utils";
 type CollectionPayload = {
     id?: string;
     slug?: string;

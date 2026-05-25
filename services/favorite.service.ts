@@ -1,5 +1,5 @@
 import { Collection } from "@/app/lib/types/cards";
-import { db } from "@/lib/db";
+import { db } from "@/app/lib/db";
 
 export const favoritesService = {
     async toggleFavorite(collection: Collection) {

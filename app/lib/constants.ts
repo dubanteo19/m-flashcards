@@ -9,3 +9,16 @@ export const ROUTES = {
     HISTORY: "/history",
     FAVORITES: "/favorites",
 } as const;
+
+export const JSON_PLACEHOLDER = `[
+  {
+    "word": "apple",
+    "meaning": "táo",
+    "reading": "りんご"
+  },
+  {
+    "word": "book",
+    "meaning": "sách",
+    "reading": "ほん"
+  }
+]`;

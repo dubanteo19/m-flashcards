@@ -1,5 +1,7 @@
+import { LanguageCode } from "@/app/lib/enums";
 import { Collection, RawCollectionResponse } from "@/app/lib/types/cards";
 import { clsx, type ClassValue } from "clsx"
+import { franc } from "franc";
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
@@ -65,3 +67,27 @@ export function formatDate(
 
   return rtf.format(diffInDays, "day");
 }
+
+export const detectLanguage = (currentText: string | undefined): LanguageCode | null => {
+  // franc needs at least 10 characters by default to yield high accuracy
+  if (!currentText || currentText.trim().length < 10) return null;
+
+  // Restrict parsing arrays exclusively to your fixed target sets
+  const detected3LetterCode = franc(currentText, {
+    only: ["eng", "cmn", "kor", "jpn"]
+  });
+
+  // Map ISO 639-3 codes safely back to your app's language state format
+  switch (detected3LetterCode) {
+    case "eng":
+      return LanguageCode.English;
+    case "cmn":
+      return LanguageCode.Chinese;
+    case "kor":
+      return LanguageCode.Korean;
+    case "jpn":
+      return LanguageCode.Japanese;
+    default:
+      return LanguageCode.English;
+  }
+};

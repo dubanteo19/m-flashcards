@@ -1,7 +1,7 @@
 "use client"
 
 import { useCooldown } from "@/hooks/useCooldown";
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/lib/utils";
 import { ReactNode } from "react";
 import { ActionButton } from "../ui/action-button";
 import { ButtonProps } from "../ui/button";

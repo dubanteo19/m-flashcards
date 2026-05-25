@@ -24,6 +24,7 @@
     "dexie": "^4.4.2",
     "dexie-react-hooks": "^4.4.0",
     "framer-motion": "^12.38.0",
+    "franc": "^6.2.0",
     "github-slugger": "^2.0.0",
     "lucide-react": "^1.8.0",
     "next": "16.2.4",

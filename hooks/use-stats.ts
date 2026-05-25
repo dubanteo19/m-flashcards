@@ -1,4 +1,4 @@
-import { db } from "@/lib/db";
+import { db } from "@/app/lib/db";
 import { useLiveQuery } from "dexie-react-hooks";
 
 export function useStats() {

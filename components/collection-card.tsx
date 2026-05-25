@@ -1,7 +1,7 @@
 "use client";
 
 import { Collection } from "@/app/lib/types/cards";
-import { cn, formatDate } from "@/lib/utils";
+import { cn, formatDate } from "@/app/lib/utils";
 import { motion } from "framer-motion";
 import { BookOpen, Clock, HeartIcon, User } from "lucide-react";
 import Link from "next/link";

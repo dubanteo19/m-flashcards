@@ -2,7 +2,7 @@
 "use client";
 import { Collection } from "@/app/lib/types/cards";
 import { CollectionCard } from "@/components/collection-card";
-import { db } from "@/lib/db";
+import { db } from "@/app/lib/db";
 import { favoritesService } from "@/services/favorite.service";
 import { useLiveQuery } from "dexie-react-hooks";
 import { motion } from "framer-motion";

@@ -2,7 +2,7 @@
 import { CollectionCard } from "@/components/collection-card";
 import { EmptyState } from "@/components/empty-state";
 import FullPageLoader from "@/components/loader";
-import { db } from "@/lib/db";
+import { db } from "@/app/lib/db";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Clock } from "lucide-react";
 import { useTranslations } from "next-intl";
