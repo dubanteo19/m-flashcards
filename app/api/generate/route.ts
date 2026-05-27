@@ -5,7 +5,7 @@ import { z } from "zod";
 
 const vocabItem = z.object({
   word: z.string().max(20),
-  reading: z.string().max(30),
+  reding: z.string().max(30),
   meaning: z.string().max(30),
 });
 

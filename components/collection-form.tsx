@@ -1,7 +1,10 @@
 "use client";
 import { LanguageCode } from "@/app/lib/enums";
 import { Collection } from "@/app/lib/types/cards";
-import { CollectionFormValues, collectionSchema } from "@/app/lib/validations/collection";
+import {
+  CollectionFormValues,
+  collectionSchema,
+} from "@/app/lib/validations/collection";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -26,7 +29,6 @@ import { Field, FieldError, FieldLabel } from "./ui/field";
 import { Switch } from "./ui/switch";
 import { JSON_PLACEHOLDER } from "@/app/lib/constants";
 import { detectLanguage } from "@/app/lib/utils";
-import TutorialButton from "./buttons/tutorial-button";
 
 interface CollectionFormProps {
   initialData?: Collection;
@@ -133,13 +135,12 @@ export default function CollectionForm({
       console.error(e);
     }
   };
-  const shouldShowPromptTemplate = !isAIMode
+  const shouldShowPromptTemplate = !isAIMode;
 
   if (isAIPending) return <AILoader />;
 
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-      <TutorialButton isCreating={isCreating} />
       <div className="grid gap-4">
         <div className="flex justify-between items-center gap-4">
           <div className="space-y-2">
@@ -147,11 +148,13 @@ export default function CollectionForm({
               {t("common.language")}
             </label>
 
-            {showLanguageSuggestion &&
+            {showLanguageSuggestion && (
               <div>
-                <span className="text-sm text-muted-foreground">Thay đổi ngôn ngữ?</span>
+                <span className="text-sm text-muted-foreground">
+                  Thay đổi ngôn ngữ?
+                </span>
               </div>
-            }
+            )}
             <LanguageSelector
               selected={language}
               onSelect={setLanguage}
@@ -199,7 +202,7 @@ export default function CollectionForm({
           <TabsTrigger value="ai" className="flex-1 gap-2">
             <Sparkles size={14} /> JSON / AI Import
           </TabsTrigger>
-          <TabsTrigger value="manual" className="flex-1">
+          <TabsTrigger disabled value="manual" className="flex-1">
             Manual (Read Only)
           </TabsTrigger>
         </TabsList>
@@ -238,6 +241,7 @@ export default function CollectionForm({
                     <Switch
                       id="ai-mode"
                       name={field.name}
+                      disabled
                       checked={field.value}
                       onCheckedChange={field.onChange}
                       data-invalid={fieldState.invalid}
@@ -333,7 +337,12 @@ export default function CollectionForm({
         </TabsContent>
       </Tabs>
 
-      <Button name="submit" type="submit" className="w-full" disabled={isPending}>
+      <Button
+        name="submit"
+        type="submit"
+        className="w-full"
+        disabled={isPending}
+      >
         {isPending ? (
           "Saving..."
         ) : (
