@@ -26,6 +26,7 @@ import { Field, FieldError, FieldLabel } from "./ui/field";
 import { Switch } from "./ui/switch";
 import { JSON_PLACEHOLDER } from "@/app/lib/constants";
 import { detectLanguage } from "@/app/lib/utils";
+import TutorialButton from "./buttons/tutorial-button";
 
 interface CollectionFormProps {
   initialData?: Collection;
@@ -132,12 +133,13 @@ export default function CollectionForm({
       console.error(e);
     }
   };
-  const shouldShowPromptTemplate = !isAIMode && sourceText;
+  const shouldShowPromptTemplate = !isAIMode
 
   if (isAIPending) return <AILoader />;
 
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+      <TutorialButton isCreating={isCreating} />
       <div className="grid gap-4">
         <div className="flex justify-between items-center gap-4">
           <div className="space-y-2">
@@ -258,7 +260,12 @@ export default function CollectionForm({
                     <Input
                       type="number"
                       value={field.value}
-                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value);
+                        if (!value) return;
+                        if (value > 80 || value < 1) return;
+                        field.onChange(value);
+                      }}
                       className="w-16 h-7 px-2 py-0 text-xs"
                     />
 
@@ -326,7 +333,7 @@ export default function CollectionForm({
         </TabsContent>
       </Tabs>
 
-      <Button type="submit" className="w-full" disabled={isPending}>
+      <Button name="submit" type="submit" className="w-full" disabled={isPending}>
         {isPending ? (
           "Saving..."
         ) : (

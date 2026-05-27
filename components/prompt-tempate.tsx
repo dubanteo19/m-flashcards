@@ -59,6 +59,7 @@ export default function PromptTemplate({
                 </div>
                 <div className="flex items-center gap-2">
                     <Button
+                        name="copy-prompt"
                         variant="ghost"
                         size="sm"
                         type="button"
@@ -70,7 +71,7 @@ export default function PromptTemplate({
                     </Button>
                     {
                         hasCopied && (
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2" name="ai-tools">
                                 <Button asChild variant="outline" size="sm"
                                     className="gap-2 transition-all hover:scale-105 active:scale-95 border-emerald-500/30 hover:border-emerald-500 animate-pulse-outward">
                                     <a
