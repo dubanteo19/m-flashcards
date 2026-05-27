@@ -1,7 +1,10 @@
 "use client";
 import { LanguageCode } from "@/app/lib/enums";
 import { Collection } from "@/app/lib/types/cards";
-import { CollectionFormValues, collectionSchema } from "@/app/lib/validations/collection";
+import {
+  CollectionFormValues,
+  collectionSchema,
+} from "@/app/lib/validations/collection";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -132,7 +135,7 @@ export default function CollectionForm({
       console.error(e);
     }
   };
-  const shouldShowPromptTemplate = !isAIMode && sourceText;
+  const shouldShowPromptTemplate = !isAIMode;
 
   if (isAIPending) return <AILoader />;
 
@@ -145,11 +148,13 @@ export default function CollectionForm({
               {t("common.language")}
             </label>
 
-            {showLanguageSuggestion &&
+            {showLanguageSuggestion && (
               <div>
-                <span className="text-sm text-muted-foreground">Thay đổi ngôn ngữ?</span>
+                <span className="text-sm text-muted-foreground">
+                  Thay đổi ngôn ngữ?
+                </span>
               </div>
-            }
+            )}
             <LanguageSelector
               selected={language}
               onSelect={setLanguage}
@@ -197,7 +202,7 @@ export default function CollectionForm({
           <TabsTrigger value="ai" className="flex-1 gap-2">
             <Sparkles size={14} /> JSON / AI Import
           </TabsTrigger>
-          <TabsTrigger value="manual" className="flex-1">
+          <TabsTrigger disabled value="manual" className="flex-1">
             Manual (Read Only)
           </TabsTrigger>
         </TabsList>
@@ -236,6 +241,7 @@ export default function CollectionForm({
                     <Switch
                       id="ai-mode"
                       name={field.name}
+                      disabled
                       checked={field.value}
                       onCheckedChange={field.onChange}
                       data-invalid={fieldState.invalid}
@@ -258,7 +264,12 @@ export default function CollectionForm({
                     <Input
                       type="number"
                       value={field.value}
-                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value);
+                        if (!value) return;
+                        if (value > 80 || value < 1) return;
+                        field.onChange(value);
+                      }}
                       className="w-16 h-7 px-2 py-0 text-xs"
                     />
 
@@ -326,7 +337,12 @@ export default function CollectionForm({
         </TabsContent>
       </Tabs>
 
-      <Button type="submit" className="w-full" disabled={isPending}>
+      <Button
+        name="submit"
+        type="submit"
+        className="w-full"
+        disabled={isPending}
+      >
         {isPending ? (
           "Saving..."
         ) : (

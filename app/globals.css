@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-
+@import "shepherd.js/dist/css/shepherd.css";
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -73,6 +73,7 @@
   --chart-4: oklch(0.378 0.015 216);
   --chart-5: oklch(0.275 0.011 216.9);
   --radius: 0.625rem;
+  --ripple: oklch(0.723 0.014 214.4);
   --sidebar: oklch(0.987 0.002 197.1);
   --sidebar-foreground: oklch(0.148 0.004 228.8);
   --sidebar-primary: oklch(0.681 0.162 75.834);
@@ -157,6 +158,7 @@
   h4 {
     @apply scroll-m-20;
   }
+
 }
 
 @layer utilities {
@@ -195,5 +197,81 @@
     100% {
       box-shadow: 0 0 0 0px rgba(16, 185, 129, 0), 0 0 0 0px rgba(59, 130, 246, 0);
     }
+  }
+}
+
+.shepherd-footer .shepherd-button {
+  /* Notice hover:!bg-primary/90 swaps the state variant to the front */
+  @apply !inline-flex !items-center !justify-center !gap-2 !whitespace-nowrap 
+         !rounded-md !text-sm !font-medium !transition-colors 
+         !bg-primary !text-primary-foreground !shadow-sm hover:!bg-primary/90 
+         !h-9 !px-4 !py-2 !cursor-pointer !outline-none;
+}
+
+/* ==========================================
+   STABLE SLOW WATER RIPPLE EFFECT
+   ========================================== */
+.tour-ripple-container-wrapper {
+  position: absolute;
+  inset: 0; /* Forces the wrapper to span the exact height/width of the target element */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  pointer-events: none !important;
+  z-index: 50 !important;
+}
+
+.tour-ripple-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.tour-ripple-core {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background-color: var(--ripple);
+  box-shadow: 0 0 8px var(--ripple);
+}
+
+.tour-ripple-wave {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  border: 2px solid var(--ripple);
+  opacity: 0;
+  /* Slowed down to 2.5s and softened the easing function curve */
+  animation: shepherd-slow-ripple 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+.tour-ripple-wave-delayed {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  border: 2px solid var(--ripple);
+  opacity: 0;
+  animation: shepherd-slow-ripple 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  animation-delay: 1.1s; /* Balanced stagger delay */
+}
+
+@keyframes shepherd-slow-ripple {
+  0% {
+    transform: scale(0.2);
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
   }
 }
