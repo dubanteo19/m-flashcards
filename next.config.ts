@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
   //   workerThreads: false,
   //   cpus: 1
   // },
-  allowedDevOrigins: ['192.168.100.38'],
+  allowedDevOrigins: ['*.trycloudflare.com'],
 };
 
 export default withNextIntl(nextConfig);

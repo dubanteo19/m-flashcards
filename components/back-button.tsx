@@ -1,7 +1,8 @@
 import { ROUTES } from "@/app/lib/constants";
+import { Link } from "@/i18n/navigation";
 import { ChevronLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+
 
 export default function BackButton() {
     const t = useTranslations("common");

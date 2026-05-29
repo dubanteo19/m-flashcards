@@ -4,8 +4,8 @@ import {
     TooltipContent,
     TooltipTrigger
 } from "@/components/ui/tooltip";
-import Link from "next/link";
 import { ReactNode } from "react";
+import { Link } from "@/i18n/navigation";
 
 interface ActionButtonProps extends ButtonProps {
     label?: string;

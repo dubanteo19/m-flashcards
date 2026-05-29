@@ -1,5 +1,6 @@
 "use client";
 
+import { AuthProvider } from "@/context/AuthContext";
 import ReactQueryProvider from "./react-query-provider";
 import { AppTooltipProvider } from "./tooltip-provider";
 
@@ -22,4 +23,6 @@ export const Providers = composeProviders([
   ReactQueryProvider,
   AppTooltipProvider,
   ShepherdJourneyProvider,
+  AuthProvider
+
 ]);
