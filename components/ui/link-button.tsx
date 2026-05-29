@@ -1,5 +1,5 @@
 import { Button, type ButtonProps } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { ReactNode } from "react";
 
 interface ActionButtonProps extends ButtonProps {

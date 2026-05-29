@@ -46,5 +46,9 @@ export default function proxy(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/((?!api|_next|.*\\..*).*)"]
+    // Match all pathnames except for the ones starting with:
+    // - api (API routes)
+    // - _next (Next.js internal static assets and BOTH types of HMR streams)
+    // - favicon.ico, etc.
+    matcher: ["/((?!api|_next|favicon.ico|.*\\..*$).*)"]
 };

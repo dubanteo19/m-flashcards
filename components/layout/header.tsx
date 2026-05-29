@@ -5,13 +5,15 @@ import { Badge } from "@/components/ui/badge";
 import { useStats } from "@/hooks/use-stats";
 import { BookPlusIcon, HeartIcon, HistoryIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
 import { AppLanguageSelector } from "../app-language-selector";
 import { ActionButton } from "../ui/action-button";
 import { LinkButton } from "../ui/link-button";
+import { Link } from "@/i18n/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Header() {
     const { favoritesCount } = useStats();
+    const { username } = useAuth();
     const t = useTranslations("header");
 
     return (
@@ -44,7 +46,7 @@ export default function Header() {
                 <AppLanguageSelector />
                 <LinkButton variant="outline" href={ROUTES.DASHBOARD}>
                     <span className="sm:hidden">
-                        <BookPlusIcon  />
+                        <BookPlusIcon />
                     </span>
 
                     <span className="hidden sm:inline">

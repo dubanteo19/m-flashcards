@@ -4,13 +4,13 @@ import { Collection } from "@/app/lib/types/cards";
 import { cn, formatDate } from "@/app/lib/utils";
 import { motion } from "framer-motion";
 import { BookOpen, Clock, HeartIcon, User } from "lucide-react";
-import Link from "next/link";
 import { Flag } from "./flag-icon";
 import { ActionButton } from "./ui/action-button";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { LinkButton } from "./ui/link-button";
 import { ROUTES } from "@/app/lib/constants";
 import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 type CardVariant = "explore" | "history";
 interface CollectionCardProps {
