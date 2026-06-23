@@ -54,7 +54,7 @@ export function AnimatedInput<
                     field.ref(e);
                 }}
                 placeholder=""
-                maxLength={1000}
+                maxLength={10000}
                 rows={3}
                 className="min-h-[100px] max-h-[300px] resize-y relative z-10"
                 onChange={(e) => {
